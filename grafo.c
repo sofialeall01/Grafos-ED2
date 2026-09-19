@@ -145,10 +145,6 @@ int GVcriaVertice(Grafo p) {
 
 int GAcriaAresta(Grafo p, int alfa, int omega) {
 
-    if (p == NULL) {
-        return 0;
-    }
-
     if (p->numArestas >= p->maxArestas) {
         return 0;
     }
@@ -180,9 +176,6 @@ int GAcriaAresta(Grafo p, int alfa, int omega) {
 }
 
 int GBexisteIdVertice(Grafo p, int v){
-    if(p == NULL){
-        return 0;
-    }
     //armazena a quantidade de vertices
     int numVertices = p->vertice[0].primeiraSaida;
 
@@ -195,10 +188,6 @@ int GBexisteIdVertice(Grafo p, int v){
 }
 
 int GBexisteIdAresta(Grafo p, int a){
-    if(p == NULL){
-        return 0;
-    }
-
     //verifica se o identificador da aresta é válido
     if (a <= 0 || a > p->numArestas) {
         return 0;
@@ -206,3 +195,28 @@ int GBexisteIdAresta(Grafo p, int a){
     
     return 1;
 }
+
+int GBexisteArestaDir(Grafo p, int v1, int v2){
+    // Verifica se os identificadores dos vértices são válidos.
+    if (v1 <= 0 || v2 <= 0 ||
+        v1 > p->vertice[0].primeiraSaida ||
+        v2 > p->vertice[0].primeiraSaida) {
+        return 0;
+    }
+
+    int aresta = p->vertice[v1].primeiraSaida;
+
+    while (aresta != 0) {
+
+        // Verifica se a aresta chega em v2.
+        if (p->aresta[aresta].omega == v2) {
+            return 1;
+        }
+
+        // Vai para a próxima aresta de saída.
+        aresta = p->aresta[aresta].proxSaida;
+    }
+
+    return 0;
+}
+

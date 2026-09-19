@@ -34,7 +34,7 @@ int GBexisteIdVertice(Grafo p, int v);
 int GBexisteIdAresta(Grafo p, int a);
 
 // /* Verifica se existe uma aresta dirigida partindo de v1 e chegando em v2 */
-// int GBexisteArestaDir(Grafo p, int v1, int v2);
+int GBexisteArestaDir(Grafo p, int v1, int v2);
 
 // /* Verifica se existe uma aresta não dirigida entre v1 e v2 */
 // int GBexisteAresta(Grafo p, int v1, int v2);
