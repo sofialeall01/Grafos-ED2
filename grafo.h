@@ -24,8 +24,8 @@ Grafo GGdestroiGrafo(Grafo p);
 /* Cria um novo vértice no grafo e retorna o seu identificador (ID) */
 int GVcriaVertice(Grafo p);
 
-// /* Cria uma aresta ligando v1 a v2 e retorna o seu identificador (ID) */
-// int GAcriaAresta(Grafo p, int v1, int v2);
+// /* Cria uma aresta ligando alfa a omega e retorna o seu identificador (ID) */
+int GAcriaAresta(Grafo p, int alfa, int omega);
 
 // /* Verifica se existe um vértice com o ID informado no grafo */
 // int GBexisteIdVertice(Grafo p, int v);

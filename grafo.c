@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "grafo.h"
 
-
 typedef struct {
     int alfa;        /* Identificador do vértice de partida (origem) */
     int omega;       /* Identificador do vértice de chegada (destino) */
@@ -20,11 +19,10 @@ typedef struct {
 struct grafo {
     int maxVertices;   /* Capacidade maxima prevista para vertices */
     int maxArestas;    /* Capacidade maxima prevista para arestas */
-
+    int numArestas;
     Vertice *vertice;  /* Vetor alocado dinamicamente para os Vertices */
     Aresta *aresta;    /* Vetor alocado dinamicamente para as Arestas */
 };
-
 
 
 /*
@@ -63,7 +61,7 @@ Grafo GGcriaGrafo(int v, int a) {
         free(g);
         return NULL;
     }
-
+    g->numArestas = 0;
     /* 5. Inicializa os controles na posicao 0 de cada vetor */
     /* vertice[0].primeiraSaida armazena a quantidade de vertices criados (inicia em 0) */
     g->vertice[0].primeiraSaida = 0;
@@ -141,6 +139,42 @@ int GVcriaVertice(Grafo p) {
     /* PÓS-REQUISITO: O vértice 'v' passa a existir sem arestas vinculadas (0) */
     p->vertice[v].primeiraSaida = 0;
     p->vertice[v].primeiraEntrada = 0;
-
+ 
     return v;
+}
+
+int GAcriaAresta(Grafo p, int alfa, int omega) {
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    if (p->numArestas >= p->maxArestas) {
+        return 0;
+    }
+
+    int numVertices = p->vertice[0].primeiraSaida;
+
+    /*Verifica se o alfa e o omega existem */
+    if (alfa <= 0 || alfa > numVertices ||
+        omega <= 0 || omega > numVertices) {
+        return 0;
+    }
+
+    p->numArestas++;
+    int idAresta = p->numArestas;
+
+    /*Guarda a origem e o destino*/
+    p->aresta[idAresta].alfa = alfa;
+    p->aresta[idAresta].omega = omega;
+
+    /*Add a aresta na saída do alfa*/
+    p->aresta[idAresta].proxSaida = p->vertice[alfa].primeiraSaida;
+    p->vertice[alfa].primeiraSaida = idAresta;
+    
+    /*Add a aresta na saída do omega*/
+    p->aresta[idAresta].proxEntrada = p->vertice[omega].primeiraEntrada;
+    p->vertice[omega].primeiraEntrada = idAresta;
+
+    return idAresta;
 }

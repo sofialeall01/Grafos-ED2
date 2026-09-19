@@ -101,6 +101,22 @@ void exibirMenu(Grafo *g) {
                     printf(">> Nao foi possivel criar o vertice (limite maximo atingido).\n");
                 }
                 break;
+            case 4:  
+                int alfa, omega;
+                printf("Digite o vertice de origem(alfa): ");
+                scanf("%d", &alfa);
+
+                printf("Digite o vertice de destino(omega): ");
+                scanf("%d", &omega);
+
+                int aresta = GAcriaAresta(*g, alfa, omega);
+                if (aresta == 0) {
+                    printf("Nao foi possivel criar a aresta.\n");
+                } else {
+                    printf("Aresta criada com sucesso! ID: %d\n", aresta);
+                }
+                break;
+
 
             case 0:
                 printf("\n>> Encerrando o programa...\n");
