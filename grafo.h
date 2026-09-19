@@ -28,10 +28,10 @@ int GVcriaVertice(Grafo p);
 int GAcriaAresta(Grafo p, int alfa, int omega);
 
 // /* Verifica se existe um vértice com o ID informado no grafo */
-// int GBexisteIdVertice(Grafo p, int v);
+int GBexisteIdVertice(Grafo p, int v);
 
 // /* Verifica se existe uma aresta com o ID informado no grafo */
-// int GBexisteIdAresta(Grafo p, int a);
+int GBexisteIdAresta(Grafo p, int a);
 
 // /* Verifica se existe uma aresta dirigida partindo de v1 e chegando em v2 */
 // int GBexisteArestaDir(Grafo p, int v1, int v2);

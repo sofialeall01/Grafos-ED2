@@ -178,3 +178,31 @@ int GAcriaAresta(Grafo p, int alfa, int omega) {
 
     return idAresta;
 }
+
+int GBexisteIdVertice(Grafo p, int v){
+    if(p == NULL){
+        return 0;
+    }
+    //armazena a quantidade de vertices
+    int numVertices = p->vertice[0].primeiraSaida;
+
+    //verifica se o identificador do vertice é válido
+    if (v <= 0 || v > numVertices) {
+        return 0;
+    }
+    
+    return 1;
+}
+
+int GBexisteIdAresta(Grafo p, int a){
+    if(p == NULL){
+        return 0;
+    }
+
+    //verifica se o identificador da aresta é válido
+    if (a <= 0 || a > p->numArestas) {
+        return 0;
+    }
+    
+    return 1;
+}

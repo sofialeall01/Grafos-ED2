@@ -3,7 +3,7 @@
 #include "grafo.h"
 
 void exibirMenu(Grafo *g);
-
+int existe;
 int main(void) {
     Grafo g = NULL;
 
@@ -103,17 +103,46 @@ void exibirMenu(Grafo *g) {
                 break;
             case 4:  
                 int alfa, omega;
-                printf("Digite o vertice de origem(alfa): ");
+                printf("Digite o vértice de origem(alfa): ");
                 scanf("%d", &alfa);
 
-                printf("Digite o vertice de destino(omega): ");
+                printf("Digite o vértice de destino(omega): ");
                 scanf("%d", &omega);
 
                 int aresta = GAcriaAresta(*g, alfa, omega);
                 if (aresta == 0) {
-                    printf("Nao foi possivel criar a aresta.\n");
+                    printf("Não foi possivel criar a aresta.\n");
                 } else {
                     printf("Aresta criada com sucesso! ID: %d\n", aresta);
+                }
+                break;
+            case 5:
+                int identificadorVertice;
+
+                printf("Digite o id do vértice:");
+                scanf("%d", &identificadorVertice);
+
+                existe = GBexisteIdVertice(*g, identificadorVertice);
+
+                if(existe == 0){
+                    printf(">> O grafo ou o vértice não existe.\n");
+                }else{
+                    printf(">> O vértice existe.");
+                }
+                break;
+
+            case 6:
+                int identificadorAresta;
+
+                printf("Digite o id da aresta:");
+                scanf("%d", &identificadorAresta);
+
+                existe = GBexisteIdAresta(*g, identificadorAresta);
+
+                if(existe == 0){
+                    printf(">> O grafo ou a aresta não existe.\n");
+                }else{
+                    printf(">> A aresta existe.");
                 }
                 break;
 
