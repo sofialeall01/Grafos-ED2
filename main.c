@@ -251,6 +251,20 @@ void exibirMenu(Grafo *g) {
                 
                 break;
 
+            case 11:
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+                existe = GVprimeiroVertice(*g);
+                if(existe == 0){
+                    printf(">> Não existe vértice.\n");
+                }else{
+                   printf(">> Id do primeiro vértice: %d\n", existe);
+                }
+                
+                break;
+
             case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;

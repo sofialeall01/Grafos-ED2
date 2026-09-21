@@ -295,3 +295,16 @@ int GApegaAresta(Grafo p, int v1, int v2) {
     return 0;
 }
 
+int GVprimeiroVertice(Grafo p) {
+    if (p == NULL) {
+        return 0;
+    }
+
+    for (int v = 1; v <= p->maxVertices; v++) {
+        if (p->vertice[v].primeiraSaida != -1) {
+            return v;
+        }
+    }
+
+    return 0;
+}

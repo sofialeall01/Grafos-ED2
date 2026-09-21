@@ -46,7 +46,7 @@ int GApegaArestaDir(Grafo p, int v1, int v2);
 int GApegaAresta(Grafo p, int v1, int v2);
 
 // /* Retorna o ID do primeiro vértice do grafo (menor identificador) */
-// int GVprimeiroVertice(Grafo p);
+ int GVprimeiroVertice(Grafo p);
 
 // /* Retorna o ID do próximo vértice no grafo maior que v1 (ou 0 se não houver) */
 // int GVproximoVertice(Grafo p, int v1);
