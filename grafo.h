@@ -37,13 +37,13 @@ int GBexisteIdAresta(Grafo p, int a);
 int GBexisteArestaDir(Grafo p, int v1, int v2);
 
 // /* Verifica se existe uma aresta não dirigida entre v1 e v2 */
-// int GBexisteAresta(Grafo p, int v1, int v2);
+int GBexisteAresta(Grafo p, int v1, int v2);
 
 // /* Retorna o ID da aresta dirigida que parte de v1 e chega em v2 (ou 0 se não existir) */
-// int GApegaArestaDir(Grafo p, int v1, int v2);
+int GApegaArestaDir(Grafo p, int v1, int v2);
 
 // /* Retorna o ID da aresta não dirigida entre v1 e v2 (ou 0 se não existir) */
-// int GApegaAresta(Grafo p, int v1, int v2);
+int GApegaAresta(Grafo p, int v1, int v2);
 
 // /* Retorna o ID do primeiro vértice do grafo (menor identificador) */
 // int GVprimeiroVertice(Grafo p);

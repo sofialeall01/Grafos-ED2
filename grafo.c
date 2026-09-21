@@ -220,3 +220,78 @@ int GBexisteArestaDir(Grafo p, int v1, int v2){
     return 0;
 }
 
+int GApegaArestaDir(Grafo p, int v1, int v2){
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* Validar se os vértices existem no grafo */
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+        return 0;
+    }
+
+    /* Percorre a Saída de v1 */
+    int aresta = p->vertice[v1].primeiraSaida;
+
+    while (aresta != 0) {
+        /* Se a aresta chega até v2 (omega == v2), encontramos a aresta dirigida(retorna id) */
+        if (p->aresta[aresta].omega == v2) {
+            return aresta; 
+        }
+        /* Avança para a próxima aresta */
+        aresta = p->aresta[aresta].proxSaida;
+    }
+
+    return 0; /* Aresta não encontrada */
+}
+
+int GBexisteAresta(Grafo p, int v1, int v2) {
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* Verifica se os vértices existem */
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+        return 0;
+    }
+
+    /* Verifica v1 -> v2 */
+    if (GBexisteArestaDir(p, v1, v2)) {
+        return 1;
+    }
+
+    /* Verifica v2 -> v1 */
+    if (GBexisteArestaDir(p, v2, v1)) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int GApegaAresta(Grafo p, int v1, int v2) {
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* Verifica se os vértices existem */
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+        return 0;
+    }
+
+    /* Procura v1 -> v2 */
+    int aresta = GApegaArestaDir(p, v1, v2);
+
+    if (aresta != 0) {
+        return aresta;
+    }
+
+    /* Procura v2 -> v1 */
+    aresta = GApegaArestaDir(p, v2, v1);
+
+    if (aresta != 0) {
+        return aresta;
+    }
+
+    return 0;
+}
+

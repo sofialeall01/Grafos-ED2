@@ -4,6 +4,8 @@
 
 void exibirMenu(Grafo *g);
 int existe;
+int v1, v2;
+
 int main(void) {
     Grafo g = NULL;
 
@@ -165,7 +167,6 @@ void exibirMenu(Grafo *g) {
                 break;
 
             case 7:
-                int v1, v2;
                 if (*g == NULL) {
                     printf(">> Crie ou carregue um grafo primeiro.\n");
                     break;
@@ -183,6 +184,69 @@ void exibirMenu(Grafo *g) {
                     printf(">> A aresta dirigida não existe.\n");
                 }else{
                     printf(">> A aresta dirigida existe.");
+                }
+                
+                break;
+            case 8:
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+
+                printf("Digite o id do vértice 1:");
+                scanf("%d", &v1);
+
+                printf("Digite o id do vértice 2:");
+                scanf("%d", &v2);
+
+                existe = GBexisteAresta(*g, v1, v2);
+
+                if(existe == 0){
+                    printf(">> A aresta não dirigida não existe.\n");
+                }else{
+                    printf(">> A aresta não dirigida existe.");
+                }
+                
+                break;
+            case 9:
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+
+                printf("Digite o id do vértice de partida:");
+                scanf("%d", &v1);
+
+                printf("Digite o id do vértice de chegada:");
+                scanf("%d", &v2);
+
+                existe = GApegaArestaDir(*g, v1, v2);
+
+                if(existe == 0){
+                    printf(">> A aresta dirigida não existe.\n");
+                }else{
+                    printf(">> A aresta dirigida existe. Id: %d\n", existe);
+                }
+                
+                break;
+            case 10:
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+
+                printf("Digite o id do vértice 1:");
+                scanf("%d", &v1);
+
+                printf("Digite o id do vértice 2:");
+                scanf("%d", &v2);
+
+                existe = GApegaAresta(*g, v1, v2);
+
+                if(existe == 0){
+                    printf(">> A aresta não dirigida não existe.\n");
+                }else{
+                   printf(">> A aresta não dirigida existe. Id: %d\n", existe);
                 }
                 
                 break;
