@@ -69,11 +69,11 @@ int GInumeroArestas(Grafo p);
 /* Retorna a capacidade máxima prevista de arestas do grafo */
 int GInumeroArestasMax(Grafo p);
 
-// /* Carrega a estrutura de um grafo armazenado em um arquivo de texto */
-// Grafo GGcarregaGrafo(char *f);
+/* Carrega a estrutura de um grafo armazenado em um arquivo de texto */
+Grafo GGcarregaGrafo(char *f);
 
-// /* Salva a estrutura do grafo atual em um arquivo de texto */
-// int GBsalvaGrafo(Grafo p, char *f);
+/* Salva a estrutura do grafo atual em um arquivo de texto */
+int GBsalvaGrafo(Grafo p, char *f);
 
 // /* ============================================================================
 //  * 2.2.2 Operações relacionadas aos vértices do grafo

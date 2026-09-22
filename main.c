@@ -355,7 +355,48 @@ void exibirMenu(Grafo *g) {
                 int maxA = GInumeroArestasMax(*g);
                 printf(">> Numero maximo de arestas previsto: %d\n", maxA);
                 break;
-            case 0:
+
+                case 19:
+                {
+                    char nomeArquivo[100];
+                    printf("Digite o nome do arquivo a ser carregado (ex: grafo.txt): ");
+                    scanf("%99s", nomeArquivo);
+
+                    /* Se ja houver um grafo alocado, destroi antes de carregar o novo */
+                    if (*g != NULL) {
+                        GGdestroiGrafo(*g);
+                        *g = NULL;
+                    }
+
+                    *g = GGcarregaGrafo(nomeArquivo);
+
+                    if (*g != NULL) {
+                        printf(">> Grafo carregado com sucesso a partir de '%s'!\n", nomeArquivo);
+                    } else {
+                        printf(">> Falha ao carregar o grafo.\n");
+                    }
+                }
+                break;
+                
+                case 20:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    char nomeArquivo[100];
+                    printf("Digite o nome do arquivo para salvar (ex: grafo_salvo.txt): ");
+                    scanf("%99s", nomeArquivo);
+
+                    if (GBsalvaGrafo(*g, nomeArquivo)) {
+                        printf(">> Grafo salvo com sucesso em '%s'!\n", nomeArquivo);
+                    } else {
+                        printf(">> Falha ao salvar o grafo em arquivo.\n");
+                    }
+                }
+                break;
+                
+                case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;
 

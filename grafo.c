@@ -404,3 +404,71 @@ int GInumeroArestasMax(Grafo p) {
     /* 2. Retorna a capacidade maxima de arestas previstos */
     return p->maxArestas;
 }
+
+Grafo GGcarregaGrafo(char *f) {
+    if (f == NULL) return NULL;
+
+    FILE *arquivo = fopen(f, "r");
+    if (arquivo == NULL) {
+        printf(">> Erro: Nao foi possivel abrir o arquivo '%s'.\n", f);
+        return NULL;
+    }
+
+    int maxV, maxA;
+    if (fscanf(arquivo, "%d %d", &maxV, &maxA) != 2) {
+        fclose(arquivo);
+        return NULL;
+    }
+
+    Grafo p = GGcriaGrafo(maxV, maxA);
+    if (p == NULL) {
+        fclose(arquivo);
+        return NULL;
+    }
+
+    int alfa, omega;
+    while (fscanf(arquivo, "%d %d", &alfa, &omega) == 2) {
+        /* Cria vértices dinamicamente caso o ID lido seja maior que a quantidade atual */
+        while (GInumeroVertices(p) < alfa) {
+            GVcriaVertice(p);
+        }
+        while (GInumeroVertices(p) < omega) {
+            GVcriaVertice(p);
+        }
+
+        /* Cria a aresta */
+        GAcriaAresta(p, alfa, omega);
+    }
+
+    fclose(arquivo);
+    return p;
+}
+
+
+int GBsalvaGrafo(Grafo p, char *f) {
+    /* 1. Validações prévias */
+    if (p == NULL || f == NULL) {
+        return 0;
+    }
+
+    /* 2. Tenta abrir o arquivo para escrita */
+    FILE *arquivo = fopen(f, "w");
+    if (arquivo == NULL) {
+        printf(">> Erro: Nao foi possivel criar ou abrir o arquivo '%s' para escrita.\n", f);
+        return 0;
+    }
+
+    /* 3. Escreve o cabeçalho: maxVertices e maxArestas */
+    fprintf(arquivo, "%d %d\n", p->maxVertices, p->maxArestas);
+
+    /* 4. Percorre o vetor de arestas e salva apenas as ativas */
+    for (int i = 1; i <= p->maxArestas; i++) {
+        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0) {
+            fprintf(arquivo, "%d %d\n", p->aresta[i].alfa, p->aresta[i].omega);
+        }
+    }
+
+    /* 5. Fecha o arquivo e retorna sucesso */
+    fclose(arquivo);
+    return 1;
+}
