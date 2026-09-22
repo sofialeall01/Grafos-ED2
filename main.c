@@ -395,7 +395,21 @@ void exibirMenu(Grafo *g) {
                     }
                 }
                 break;
-                
+
+                case 21:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int v;
+                    printf("Digite o ID do vertice para consultar o grau: ");
+                    scanf("%d", &v);
+
+                    int grau = GIpegaGrau(*g, v);
+                    printf(">> O grau do vertice %d e: %d\n", v, grau);
+                }
+                break;
                 case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;

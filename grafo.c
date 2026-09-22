@@ -472,3 +472,39 @@ int GBsalvaGrafo(Grafo p, char *f) {
     fclose(arquivo);
     return 1;
 }
+
+int GIpegaGrau(Grafo p, int v) {
+    /* 1. Valida se o grafo e o vetor de vertices existem */
+    if (p == NULL || p->vertice == NULL) {
+        return 0;
+    }
+
+    /* 2. Valida se o identificador do vertice e valido */
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    /* 3. Verifica se o vertice existe/esta ativo no grafo */
+    /* Assumindo que um vertice inativo possui primeiraSaida e primeiraEntrada como -1 ou sem registro */
+    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1) {
+        return 0;
+    }
+
+    int grau = 0;
+
+    /* 4. Conta as arestas na Estrela de Saida (Arestas saindo de v) */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        grau++;
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* 5. Conta as arestas na Estrela de Entrada (Arestas chegando em v) */
+    a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        grau++;
+        a = p->aresta[a].proxEntrada;
+    }
+
+    return grau;
+}

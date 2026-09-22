@@ -79,8 +79,8 @@ int GBsalvaGrafo(Grafo p, char *f);
 //  * 2.2.2 Operações relacionadas aos vértices do grafo
 //  * ============================================================================ */
 
-// /* Retorna o grau do vértice v (somatório de entradas e saídas) */
-// int GIpegaGrau(Grafo p, int v);
+/* Retorna o grau do vértice v (somatório de entradas e saídas) */
+int GIpegaGrau(Grafo p, int v);
 
 // /* Retorna a primeira aresta na estrela do vértice v (para grafos não dirigidos) */
 // int GAprimaAresta(Grafo p, int v);
