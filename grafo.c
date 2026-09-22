@@ -308,3 +308,54 @@ int GVprimeiroVertice(Grafo p) {
 
     return 0;
 }
+
+int GVproximoVertice(Grafo p, int v1) {
+    /* Valida se a estrutura do grafo existe */
+    if (p == NULL || p->vertice == NULL) {
+        return 0;
+    }
+
+    /* Ajusta v1 para 0 caso seja passado um valor negativo */
+    if (v1 < 0) {
+        v1 = 0;
+    }
+
+    /* Procura o menor ID de vértice que seja maior que v1 */
+    for (int i = v1 + 1; i <= p->maxVertices; i++) {
+        /* Na sua estrutura, um vértice existe se primeiraSaida for diferente de -1 */
+        if (p->vertice[i].primeiraSaida != -1) {
+            return i; /* Retorna o proximo vertice existente (v2) */
+        }
+    }
+
+    /* Retorna 0 caso nao exista nenhum vertice com ID maior que v1 */
+    return 0;
+}
+
+int GAproximaAresta(Grafo p, int a1) {
+    /* 1. Valida se a estrutura do grafo e o vetor de arestas existem */
+    if (p == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    /* 2. Ajusta a1 caso seja passado um valor negativo */
+    if (a1 < 0) {
+        a1 = 0;
+    }
+
+    /* 3. Procura o menor ID de aresta que seja maior que a1 */
+    for (int i = a1 + 1; i <= p->maxArestas; i++) {
+        /* Uma aresta valida possui alfa e omega definidos (diferentes de 0) */
+        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0) {
+            return i; /* Retorna o ID da proxima aresta existente (a2) */
+        }
+    }
+
+    /* 4. Retorna 0 caso nao exista nenhuma aresta com ID maior que a1 */
+    return 0;
+}
+
+int GAprimeiraAresta(Grafo p) {
+    /* Retorna o menor ID de aresta existente (maior que 0) */
+    return GAproximaAresta(p, 0);
+}

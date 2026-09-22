@@ -5,6 +5,7 @@
 void exibirMenu(Grafo *g);
 int existe;
 int v1, v2;
+int a1, a2;
 
 int main(void) {
     Grafo g = NULL;
@@ -263,6 +264,55 @@ void exibirMenu(Grafo *g) {
                    printf(">> Id do primeiro vértice: %d\n", existe);
                 }
                 
+                break;
+
+                case 12:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                printf("Digite o ID do vertice atual (v1): ");
+                scanf("%d", &v1);
+
+                v2 = GVproximoVertice(*g, v1);
+
+                if (v2 != 0) {
+                    printf(">> O proximo vertice existente apos %d e: %d\n", v1, v2);
+                } else {
+                    printf(">> Nao existe proximo vertice apos %d.\n", v1);
+                }
+                break;
+
+                case 13:
+                    if (*g == NULL) { 
+                        printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                        break; 
+                    }
+
+                    a1 = GAprimeiraAresta(*g);
+
+                    if (a1 != 0) {
+                        printf(">> A primeira aresta do grafo e: %d\n", a1);
+                    } else {
+                        printf(">> O grafo nao possui arestas criadas.\n");
+                    }
+                    break;
+
+                case 14:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                printf("Digite o ID da aresta atual (a1): ");
+                scanf("%d", &a1);
+
+                a2 = GAproximaAresta(*g, a1);
+
+                if (a2 != 0) {
+                    printf(">> A proxima aresta existente apos %d e: %d\n", a1, a2);
+                } else {
+                    printf(">> Nao existe proxima aresta apos %d.\n", a1);
+                }
                 break;
 
             case 0:

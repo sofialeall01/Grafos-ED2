@@ -48,14 +48,14 @@ int GApegaAresta(Grafo p, int v1, int v2);
 // /* Retorna o ID do primeiro vértice do grafo (menor identificador) */
  int GVprimeiroVertice(Grafo p);
 
-// /* Retorna o ID do próximo vértice no grafo maior que v1 (ou 0 se não houver) */
-// int GVproximoVertice(Grafo p, int v1);
+/* Retorna o ID do próximo vértice no grafo maior que v1 (ou 0 se não houver) */
+int GVproximoVertice(Grafo p, int v1);
 
-// /* Retorna o ID da primeira aresta do grafo (menor identificador) */
-// int GAprimeiraAresta(Grafo p);
+/* Retorna o ID da primeira aresta do grafo (menor identificador) */
+int GAprimeiraAresta(Grafo p);
 
-// /* Retorna o ID da próxima aresta no grafo maior que a1 (ou 0 se não houver) */
-// int GAproximaAresta(Grafo p, int a1);
+/* Retorna o ID da próxima aresta no grafo maior que a1 (ou 0 se não houver) */
+int GAproximaAresta(Grafo p, int a1);
 
 // /* Retorna o número atual de vértices criados no grafo */
 // int GInumeroVertices(Grafo p);
