@@ -359,3 +359,48 @@ int GAprimeiraAresta(Grafo p) {
     /* Retorna o menor ID de aresta existente (maior que 0) */
     return GAproximaAresta(p, 0);
 }
+
+int GInumeroVertices(Grafo p) {
+    if (p == NULL || p->vertice == NULL) {
+        return 0;
+    }
+
+    int nv = 0;
+    for (int i = 1; i <= p->maxVertices; i++) {
+        if (p->vertice[i].primeiraSaida != -1) {
+            nv++;
+        }
+    }
+
+    return nv;
+}
+
+int GInumeroVerticesMax(Grafo p) {
+    /* 1. Valida se a estrutura do grafo existe */
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* 2. Retorna a capacidade maxima de vertices previstos */
+    return p->maxVertices;
+}
+
+int GInumeroArestas(Grafo p) {
+    /* 1. Valida se a estrutura do grafo existe */
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* 2. Retorna a quantidade atual de arestas |A| */
+    return p->numArestas;
+}
+
+int GInumeroArestasMax(Grafo p) {
+    /* 1. Valida se a estrutura do grafo existe */
+    if (p == NULL) {
+        return 0;
+    }
+
+    /* 2. Retorna a capacidade maxima de arestas previstos */
+    return p->maxArestas;
+}

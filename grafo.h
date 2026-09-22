@@ -57,17 +57,17 @@ int GAprimeiraAresta(Grafo p);
 /* Retorna o ID da próxima aresta no grafo maior que a1 (ou 0 se não houver) */
 int GAproximaAresta(Grafo p, int a1);
 
-// /* Retorna o número atual de vértices criados no grafo */
-// int GInumeroVertices(Grafo p);
+/* Retorna o número atual de vértices criados no grafo */
+int GInumeroVertices(Grafo p);
 
-// /* Retorna a capacidade máxima prevista de vértices do grafo */
-// int GInumeroVerticesMax(Grafo p);
+/* Retorna a capacidade máxima prevista de vértices do grafo */
+int GInumeroVerticesMax(Grafo p);
 
-// /* Retorna o número atual de arestas criadas no grafo */
-// int GInumeroArestas(Grafo p);
+/* Retorna o número atual de arestas criadas no grafo */
+int GInumeroArestas(Grafo p);
 
-// /* Retorna a capacidade máxima prevista de arestas do grafo */
-// int GInumeroArestasMax(Grafo p);
+/* Retorna a capacidade máxima prevista de arestas do grafo */
+int GInumeroArestasMax(Grafo p);
 
 // /* Carrega a estrutura de um grafo armazenado em um arquivo de texto */
 // Grafo GGcarregaGrafo(char *f);

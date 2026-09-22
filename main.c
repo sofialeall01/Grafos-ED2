@@ -315,6 +315,46 @@ void exibirMenu(Grafo *g) {
                 }
                 break;
 
+                case 15:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+
+                int nv = GInumeroVertices(*g);
+                printf(">> Numero total de vertices (|V|): %d\n", nv);
+                break;
+
+                
+                case 16:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+
+                int maxV = GInumeroVerticesMax(*g);
+                printf(">> Numero maximo de vertices previsto: %d\n", maxV);
+                break;
+                
+                case 17:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+
+                int na = GInumeroArestas(*g);
+                printf(">> Numero total de arestas (|A|): %d\n", na);
+                break;
+
+                 case 18:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                
+                int maxA = GInumeroArestasMax(*g);
+                printf(">> Numero maximo de arestas previsto: %d\n", maxA);
+                break;
             case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;
