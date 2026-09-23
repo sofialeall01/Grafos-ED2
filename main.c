@@ -410,6 +410,48 @@ void exibirMenu(Grafo *g) {
                     printf(">> O grau do vertice %d e: %d\n", v, grau);
                 }
                 break;
+
+                case 22:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int v;
+                    printf("Digite o ID do vertice: ");
+                    scanf("%d", &v);
+
+                    a1 = GAprimaAresta(*g, v);
+
+                    if (a1 != 0) {
+                        printf(">> A primeira aresta na estrela do vertice %d e: %d\n", v, a1);
+                    } else {
+                        printf(">> O vertice %d nao possui arestas incidentes.\n", v);
+                    }
+                }
+                break;
+
+                case 23:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int v, a1, a2;
+                    printf("Digite o ID do vertice: ");
+                    scanf("%d", &v);
+                    printf("Digite o ID da aresta atual (a1): ");
+                    scanf("%d", &a1);
+
+                    a2 = GAproxAresta(*g, v, a1);
+
+                    if (a2 != 0) {
+                        printf(">> A proxima aresta na estrela do vertice %d (apos %d) e: %d\n", v, a1, a2);
+                    } else {
+                        printf(">> Nao ha proxima aresta na estrela do vertice %d apos a aresta %d.\n", v, a1);
+                    }
+                }
+                break;
                 case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;

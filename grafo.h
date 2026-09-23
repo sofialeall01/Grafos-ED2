@@ -82,11 +82,11 @@ int GBsalvaGrafo(Grafo p, char *f);
 /* Retorna o grau do vértice v (somatório de entradas e saídas) */
 int GIpegaGrau(Grafo p, int v);
 
-// /* Retorna a primeira aresta na estrela do vértice v (para grafos não dirigidos) */
-// int GAprimaAresta(Grafo p, int v);
+/* Retorna a primeira aresta na estrela do vértice v (para grafos não dirigidos) */
+int GAprimaAresta(Grafo p, int v);
 
-// /* Retorna a próxima aresta na estrela do vértice v após a1 (não dirigido) */
-// int GAproxAresta(Grafo p, int v, int a1);
+/* Retorna a próxima aresta na estrela do vértice v após a1 (não dirigido) */
+int GAproxAresta(Grafo p, int v, int a1);
 
 // /* Retorna a primeira aresta na estrela de entrada do vértice v (dirigidos) */
 // int GAprimaEntrada(Grafo p, int v);

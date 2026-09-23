@@ -508,3 +508,70 @@ int GIpegaGrau(Grafo p, int v) {
 
     return grau;
 }
+
+int GAprimaAresta(Grafo p, int v) {
+    if (p == NULL || p->vertice == NULL || v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorAresta = 0;
+
+    /* 1. Percorre toda a estrela de SAÍDA procurando o menor ID de aresta */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        if (menorAresta == 0 || a < menorAresta) {
+            menorAresta = a;
+        }
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* 2. Percorre toda a estrela de ENTRADA procurando se há algum ID menor ainda */
+    a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        if (menorAresta == 0 || a < menorAresta) {
+            menorAresta = a;
+        }
+        a = p->aresta[a].proxEntrada;
+    }
+
+    /* Retorna o menor ID encontrado (ou 0 se não houver arestas) */
+    return menorAresta;
+}
+
+int GAproxAresta(Grafo p, int v, int a1) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorProxima = 0;
+
+    /* 2. Percorre a Estrela de Saída de v */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        if (a > a1) {
+            if (menorProxima == 0 || a < menorProxima) {
+                menorProxima = a;
+            }
+        }
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* 3. Percorre a Estrela de Entrada de v */
+    a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        if (a > a1) {
+            if (menorProxima == 0 || a < menorProxima) {
+                menorProxima = a;
+            }
+        }
+        a = p->aresta[a].proxEntrada;
+    }
+
+    /* Retorna o menor ID encontrado que e maior que a1 (ou 0 se nao existir) */
+    return menorProxima;
+}
