@@ -179,10 +179,12 @@ int GAcriaAresta(Grafo p, int alfa, int omega)
      * já existe uma aresta que chegue em 'omega'.
      * ------------------------------------------------------------- */
     int a = p->vertice[alfa].primeiraSaida;
-    while (a > 0) {
-        if (p->aresta[a].omega == omega) {
+    while (a > 0)
+    {
+        if (p->aresta[a].omega == omega)
+        {
             /* Aresta duplicada encontrada! Interrompe a criação. */
-            return 0; 
+            return 0;
         }
         a = p->aresta[a].proxSaida;
     }
@@ -817,15 +819,21 @@ int GAproxSaida(Grafo p, int v, int a1)
 }
 
 /* Remove uma aresta específica da lista de saída do vértice 'alfa' */
-void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta) {
+void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta)
+{
     int a = p->vertice[alfa].primeiraSaida;
     int ant = 0;
 
-    while (a > 0) {
-        if (a == idAresta) {
-            if (ant == 0) {
+    while (a > 0)
+    {
+        if (a == idAresta)
+        {
+            if (ant == 0)
+            {
                 p->vertice[alfa].primeiraSaida = p->aresta[a].proxSaida;
-            } else {
+            }
+            else
+            {
                 p->aresta[ant].proxSaida = p->aresta[a].proxSaida;
             }
             break;
@@ -836,15 +844,21 @@ void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta) {
 }
 
 /* Remove uma aresta específica da lista de entrada do vértice 'omega' */
-void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta) {
+void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta)
+{
     int a = p->vertice[omega].primeiraEntrada;
     int ant = 0;
 
-    while (a > 0) {
-        if (a == idAresta) {
-            if (ant == 0) {
+    while (a > 0)
+    {
+        if (a == idAresta)
+        {
+            if (ant == 0)
+            {
                 p->vertice[omega].primeiraEntrada = p->aresta[a].proxEntrada;
-            } else {
+            }
+            else
+            {
                 p->aresta[ant].proxEntrada = p->aresta[a].proxEntrada;
             }
             break;
@@ -852,28 +866,32 @@ void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta) {
         ant = a;
         a = p->aresta[a].proxEntrada;
     }
-
 }
 
-int GAremoveVertice(Grafo p, int v) {
+int GAremoveVertice(Grafo p, int v)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
     int numVertices = p->vertice[0].primeiraSaida;
-    if (v <= 0 || v > numVertices) {
+    if (v <= 0 || v > numVertices)
+    {
         return 0;
     }
 
     /* Se o vértice já foi removido (marcado como -1) */
-    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1) {
+    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1)
+    {
         return 0;
     }
 
     /* 2. Remover todas as arestas da Estrela de Saída de v (arestas que SAEM de v) */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
+    while (a > 0)
+    {
         int proximaAresta = p->aresta[a].proxSaida;
         int dest = p->aresta[a].omega;
 
@@ -888,10 +906,10 @@ int GAremoveVertice(Grafo p, int v) {
         a = proximaAresta;
     }
 
-
     /* 3. Remover todas as arestas da Estrela de Entrada de v (arestas que ENTRAM em v) */
     a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
+    while (a > 0)
+    {
         int proximaAresta = p->aresta[a].proxEntrada;
         int orig = p->aresta[a].alfa;
 
@@ -913,13 +931,16 @@ int GAremoveVertice(Grafo p, int v) {
     return 1; /* Sucesso */
 }
 
-int GAremoveAresta(Grafo p, int idAresta) {
+int GAremoveAresta(Grafo p, int idAresta)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (idAresta <= 0 || idAresta > p->maxArestas) {
+    if (idAresta <= 0 || idAresta > p->maxArestas)
+    {
         return 0;
     }
 
@@ -927,7 +948,8 @@ int GAremoveAresta(Grafo p, int idAresta) {
     int omega = p->aresta[idAresta].omega;
 
     /* Verifica se a aresta já está inativa/removida */
-    if (alfa <= 0 || omega <= 0) {
+    if (alfa <= 0 || omega <= 0)
+    {
         return 0;
     }
 
@@ -935,11 +957,16 @@ int GAremoveAresta(Grafo p, int idAresta) {
     int a = p->vertice[alfa].primeiraSaida;
     int ant = 0;
 
-    while (a > 0) {
-        if (a == idAresta) {
-            if (ant == 0) {
+    while (a > 0)
+    {
+        if (a == idAresta)
+        {
+            if (ant == 0)
+            {
                 p->vertice[alfa].primeiraSaida = p->aresta[a].proxSaida;
-            } else {
+            }
+            else
+            {
                 p->aresta[ant].proxSaida = p->aresta[a].proxSaida;
             }
             break;
@@ -952,11 +979,16 @@ int GAremoveAresta(Grafo p, int idAresta) {
     a = p->vertice[omega].primeiraEntrada;
     ant = 0;
 
-    while (a > 0) {
-        if (a == idAresta) {
-            if (ant == 0) {
+    while (a > 0)
+    {
+        if (a == idAresta)
+        {
+            if (ant == 0)
+            {
                 p->vertice[omega].primeiraEntrada = p->aresta[a].proxEntrada;
-            } else {
+            }
+            else
+            {
                 p->aresta[ant].proxEntrada = p->aresta[a].proxEntrada;
             }
             break;
@@ -1044,4 +1076,3 @@ int GVvizinho(Grafo p, int a, int v1)
 
     return 0;
 }
-
