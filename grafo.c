@@ -600,3 +600,84 @@ int GAprimaEntrada(Grafo p, int v) {
     /* Retorna o menor ID encontrado (ou 0 se EE(v) for vazia) */
     return menorAresta;
 }
+
+int GAproxEntrada(Grafo p, int v, int a1) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorProxima = 0;
+
+    /* 2. Percorre apenas a Estrela de Entrada de v (EE(v)) */
+    int a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        if (a > a1) {
+            if (menorProxima == 0 || a < menorProxima) {
+                menorProxima = a;
+            }
+        }
+        a = p->aresta[a].proxEntrada;
+    }
+
+    /* Retorna o menor ID encontrado maior que a1 (ou 0 se nao existir) */
+    return menorProxima;
+}
+
+int GAprimaSaida(Grafo p, int v) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorAresta = 0;
+
+    /* 2. Percorre apenas a Estrela de Saída de v (ES(v)) */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        if (menorAresta == 0 || a < menorAresta) {
+            menorAresta = a;
+        }
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* Retorna o menor ID encontrado (ou 0 se ES(v) estiver vazia) */
+    return menorAresta;
+}
+
+int GAproxSaida(Grafo p, int v, int a1) {
+    /* 1. Validações preliminares de segurança */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorProxima = 0;
+
+    /* 2. Percorre a Estrela de Saída de v (ES(v)) */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        /* Filtra apenas arestas com ID estritamente maior que a1 */
+        if (a > a1) {
+            /* Busca o menor ID entre os válidos (min(a2) > a1) */
+            if (menorProxima == 0 || a < menorProxima) {
+                menorProxima = a;
+            }
+        }
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* Retorna o menor ID encontrado que atende à condição (ou 0 se não existir) */
+    return menorProxima;
+}
