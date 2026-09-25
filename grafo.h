@@ -88,8 +88,8 @@ int GAprimaAresta(Grafo p, int v);
 /* Retorna a próxima aresta na estrela do vértice v após a1 (não dirigido) */
 int GAproxAresta(Grafo p, int v, int a1);
 
-// /* Retorna a primeira aresta na estrela de entrada do vértice v (dirigidos) */
-// int GAprimaEntrada(Grafo p, int v);
+/* Retorna a primeira aresta na estrela de entrada do vértice v (dirigidos) */
+int GAprimaEntrada(Grafo p, int v);
 
 // /* Retorna a próxima aresta na estrela de entrada do vértice v após a1 (dirigidos) */
 // int GAproxEntrada(Grafo p, int v, int a1);

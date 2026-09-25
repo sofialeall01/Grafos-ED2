@@ -575,3 +575,28 @@ int GAproxAresta(Grafo p, int v, int a1) {
     /* Retorna o menor ID encontrado que e maior que a1 (ou 0 se nao existir) */
     return menorProxima;
 }
+
+int GAprimaEntrada(Grafo p, int v) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (v <= 0 || v > p->maxVertices) {
+        return 0;
+    }
+
+    int menorAresta = 0;
+
+    /* 2. Percorre apenas a Estrela de Entrada de v (EE(v)) */
+    int a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        if (menorAresta == 0 || a < menorAresta) {
+            menorAresta = a;
+        }
+        a = p->aresta[a].proxEntrada;
+    }
+
+    /* Retorna o menor ID encontrado (ou 0 se EE(v) for vazia) */
+    return menorAresta;
+}

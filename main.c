@@ -46,8 +46,8 @@ void exibirMenu(Grafo *g) {
         printf("|  07-Verificar aresta dirigida       |  23-Proxima aresta do vertice              |\n");
         printf("|  08-Verificar aresta nao dirigida   |  24-Primeira aresta de entrada             |\n");
         printf("|  09-Pegar aresta dirigida           |  25-Proxima aresta de entrada              |\n");
-        printf("|  10-Pegar aresta nao dirigida       |  26-Primeira aresta de salida              |\n");
-        printf("|                                     |  27-Proxima aresta de salida               |\n");
+        printf("|  10-Pegar aresta nao dirigida       |  26-Primeira aresta de saida               |\n");
+        printf("|                                     |  27-Proxima aresta de saida                |\n");
         printf("| [ARQUIVOS]                          |  28-Verificar se e laco                    |\n");
         printf("|  19-Carregar grafo de arquivo       |  20-Salvar grafo em arquivo                |\n");
         printf("| [CAMINHO CURTO]                     |  31-Pegar vertice vizinho                  |\n");
@@ -451,6 +451,25 @@ void exibirMenu(Grafo *g) {
                         printf(">> Nao ha proxima aresta na estrela do vertice %d apos a aresta %d.\n", v, a1);
                     }
                 }
+                case 24:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int v, a1;
+                    printf("Digite o ID do vertice: ");
+                    scanf("%d", &v);
+
+                    a1 = GAprimaEntrada(*g, v);
+
+                    if (a1 != 0) {
+                        printf(">> A primeira aresta na estrela de entrada do vertice %d e: %d\n", v, a1);
+                    } else {
+                        printf(">> O vertice %d nao possui arestas na estrela de entrada.\n", v);
+                    }
+                }
+                break;
                 break;
                 case 0:
                 printf("\n>> Encerrando o programa...\n");
