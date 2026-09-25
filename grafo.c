@@ -2,28 +2,28 @@
 #include <stdlib.h>
 #include "grafo.h"
 
-typedef struct {
+typedef struct
+{
     int alfa;        /* Identificador do vértice de partida (origem) */
     int omega;       /* Identificador do vértice de chegada (destino) */
     int proxSaida;   /* Próxima aresta pertencente à Estrela de Saída de 'alfa' */
     int proxEntrada; /* Próxima aresta pertencente à Estrela de Entrada de 'omega' */
 } Aresta;
 
-
-typedef struct {
+typedef struct
+{
     int primeiraSaida;   /* ID da primeira aresta na Estrela de Saída deste vértice */
     int primeiraEntrada; /* ID da primeira aresta na Estrela de Entrada deste vértice */
 } Vertice;
 
-
-struct grafo {
-    int maxVertices;   /* Capacidade maxima prevista para vertices */
-    int maxArestas;    /* Capacidade maxima prevista para arestas */
+struct grafo
+{
+    int maxVertices; /* Capacidade maxima prevista para vertices */
+    int maxArestas;  /* Capacidade maxima prevista para arestas */
     int numArestas;
-    Vertice *vertice;  /* Vetor alocado dinamicamente para os Vertices */
-    Aresta *aresta;    /* Vetor alocado dinamicamente para as Arestas */
+    Vertice *vertice; /* Vetor alocado dinamicamente para os Vertices */
+    Aresta *aresta;   /* Vetor alocado dinamicamente para as Arestas */
 };
-
 
 /*
  * Operação :: GGcriaGrafo
@@ -31,15 +31,18 @@ struct grafo {
  * Entradas  : v (máximo de vértices), a (máximo de arestas)
  * Pré-requisitos: v > 0 e a > 0
  */
-Grafo GGcriaGrafo(int v, int a) {
+Grafo GGcriaGrafo(int v, int a)
+{
     /* Validacao dos pre-requisitos especificados */
-    if (v <= 0 || a <= 0) {
+    if (v <= 0 || a <= 0)
+    {
         return NULL;
     }
 
     /* 1. Aloca a estrutura principal do Grafo */
-    Grafo g = (Grafo) malloc(sizeof(struct grafo));
-    if (g == NULL) {
+    Grafo g = (Grafo)malloc(sizeof(struct grafo));
+    if (g == NULL)
+    {
         return NULL; /* Falha de alocacao */
     }
 
@@ -48,15 +51,17 @@ Grafo GGcriaGrafo(int v, int a) {
     g->maxArestas = a;
 
     /* 3. Aloca o vetor de vertices (tamanho v + 1 para usar indices 1..v) */
-    g->vertice = (Vertice *) malloc((v + 1) * sizeof(Vertice));
-    if (g->vertice == NULL) {
+    g->vertice = (Vertice *)malloc((v + 1) * sizeof(Vertice));
+    if (g->vertice == NULL)
+    {
         free(g);
         return NULL;
     }
 
     /* 4. Aloca o vetor de arestas (tamanho a + 1 para usar indices 1..a) */
-    g->aresta = (Aresta *) malloc((a + 1) * sizeof(Aresta));
-    if (g->aresta == NULL) {
+    g->aresta = (Aresta *)malloc((a + 1) * sizeof(Aresta));
+    if (g->aresta == NULL)
+    {
         free(g->vertice);
         free(g);
         return NULL;
@@ -74,13 +79,15 @@ Grafo GGcriaGrafo(int v, int a) {
     g->aresta[0].proxEntrada = 0;
 
     /* 6. Inicializa as posicoes de 1 ate 'v' como NAO CRIADAS (-1) */
-    for (int i = 1; i <= v; i++) {
-        g->vertice[i].primeiraSaida = -1;  /* -1 indica vertice NAO CRIADO */
+    for (int i = 1; i <= v; i++)
+    {
+        g->vertice[i].primeiraSaida = -1; /* -1 indica vertice NAO CRIADO */
         g->vertice[i].primeiraEntrada = -1;
     }
 
     /* 7. Inicializa as posicoes de 1 ate 'a' para evitar lixo de memoria */
-    for (int i = 1; i <= a; i++) {
+    for (int i = 1; i <= a; i++)
+    {
         g->aresta[i].alfa = 0;
         g->aresta[i].omega = 0;
         g->aresta[i].proxSaida = 0;
@@ -96,14 +103,18 @@ Grafo GGcriaGrafo(int v, int a) {
  * Entrada  : g (ponteiro para o grafo)
  * Retorno  : NULL
  */
-Grafo GGdestroiGrafo(Grafo g) {
-    if (g != NULL) {
-        if (g->vertice != NULL) {
+Grafo GGdestroiGrafo(Grafo g)
+{
+    if (g != NULL)
+    {
+        if (g->vertice != NULL)
+        {
             free(g->vertice);
             g->vertice = NULL;
         }
 
-        if (g->aresta != NULL) {
+        if (g->aresta != NULL)
+        {
             free(g->aresta);
             g->aresta = NULL;
         }
@@ -114,9 +125,10 @@ Grafo GGdestroiGrafo(Grafo g) {
     return NULL;
 }
 
-
-int GVcriaVertice(Grafo p) {
-    if (p == NULL || p->vertice == NULL) {
+int GVcriaVertice(Grafo p)
+{
+    if (p == NULL || p->vertice == NULL)
+    {
         return 0;
     }
 
@@ -124,13 +136,14 @@ int GVcriaVertice(Grafo p) {
     int numVerticesCriados = p->vertice[0].primeiraSaida;
 
     /* PRÉ-REQUISITO: |V| < maxVertices */
-    if (numVerticesCriados >= p->maxVertices) {
+    if (numVerticesCriados >= p->maxVertices)
+    {
         return 0; /* Limite máximo atingido */
     }
 
     /* Incrementa a quantidade total */
     numVerticesCriados++;
-    
+
     /* Atualiza o contador na posição 0 */
     p->vertice[0].primeiraSaida = numVerticesCriados;
 
@@ -139,17 +152,15 @@ int GVcriaVertice(Grafo p) {
     /* PÓS-REQUISITO: O vértice 'v' passa a existir sem arestas vinculadas (0) */
     p->vertice[v].primeiraSaida = 0;
     p->vertice[v].primeiraEntrada = 0;
- 
+
     return v;
 }
 
-int GAcriaAresta(Grafo p, int alfa, int omega) {
+int GAcriaAresta(Grafo p, int alfa, int omega)
+{
 
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
-        return 0;
-    }
-
-    if (p->numArestas >= p->maxArestas) {
+    if (p->numArestas >= p->maxArestas)
+    {
         return 0;
     }
 
@@ -157,7 +168,8 @@ int GAcriaAresta(Grafo p, int alfa, int omega) {
 
     /* Verifica se o alfa e o omega existem */
     if (alfa <= 0 || alfa > numVertices ||
-        omega <= 0 || omega > numVertices) {
+        omega <= 0 || omega > numVertices)
+    {
         return 0;
     }
 
@@ -186,49 +198,57 @@ int GAcriaAresta(Grafo p, int alfa, int omega) {
     /* Add a aresta na Estrela de Saída de alfa */
     p->aresta[idAresta].proxSaida = p->vertice[alfa].primeiraSaida;
     p->vertice[alfa].primeiraSaida = idAresta;
-    
-    /* Add a aresta na Estrela de Entrada de omega */
+
+    /*Add a aresta na saída do omega*/
     p->aresta[idAresta].proxEntrada = p->vertice[omega].primeiraEntrada;
     p->vertice[omega].primeiraEntrada = idAresta;
 
     return idAresta;
 }
 
-int GBexisteIdVertice(Grafo p, int v){
-    //armazena a quantidade de vertices
+int GBexisteIdVertice(Grafo p, int v)
+{
+    // armazena a quantidade de vertices
     int numVertices = p->vertice[0].primeiraSaida;
 
-    //verifica se o identificador do vertice é válido
-    if (v <= 0 || v > numVertices) {
+    // verifica se o identificador do vertice é válido
+    if (v <= 0 || v > numVertices)
+    {
         return 0;
     }
-    
+
     return 1;
 }
 
-int GBexisteIdAresta(Grafo p, int a){
-    //verifica se o identificador da aresta é válido
-    if (a <= 0 || a > p->numArestas) {
+int GBexisteIdAresta(Grafo p, int a)
+{
+    // verifica se o identificador da aresta é válido
+    if (a <= 0 || a > p->numArestas)
+    {
         return 0;
     }
-    
+
     return 1;
 }
 
-int GBexisteArestaDir(Grafo p, int v1, int v2){
+int GBexisteArestaDir(Grafo p, int v1, int v2)
+{
     // Verifica se os identificadores dos vértices são válidos.
     if (v1 <= 0 || v2 <= 0 ||
         v1 > p->vertice[0].primeiraSaida ||
-        v2 > p->vertice[0].primeiraSaida) {
+        v2 > p->vertice[0].primeiraSaida)
+    {
         return 0;
     }
 
     int aresta = p->vertice[v1].primeiraSaida;
 
-    while (aresta != 0) {
+    while (aresta != 0)
+    {
 
         // Verifica se a aresta chega em v2.
-        if (p->aresta[aresta].omega == v2) {
+        if (p->aresta[aresta].omega == v2)
+        {
             return 1;
         }
 
@@ -239,23 +259,28 @@ int GBexisteArestaDir(Grafo p, int v1, int v2){
     return 0;
 }
 
-int GApegaArestaDir(Grafo p, int v1, int v2){
-    if (p == NULL) {
+int GApegaArestaDir(Grafo p, int v1, int v2)
+{
+    if (p == NULL)
+    {
         return 0;
     }
 
     /* Validar se os vértices existem no grafo */
-    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2))
+    {
         return 0;
     }
 
     /* Percorre a Saída de v1 */
     int aresta = p->vertice[v1].primeiraSaida;
 
-    while (aresta != 0) {
+    while (aresta != 0)
+    {
         /* Se a aresta chega até v2 (omega == v2), encontramos a aresta dirigida(retorna id) */
-        if (p->aresta[aresta].omega == v2) {
-            return aresta; 
+        if (p->aresta[aresta].omega == v2)
+        {
+            return aresta;
         }
         /* Avança para a próxima aresta */
         aresta = p->aresta[aresta].proxSaida;
@@ -264,63 +289,77 @@ int GApegaArestaDir(Grafo p, int v1, int v2){
     return 0; /* Aresta não encontrada */
 }
 
-int GBexisteAresta(Grafo p, int v1, int v2) {
-    if (p == NULL) {
+int GBexisteAresta(Grafo p, int v1, int v2)
+{
+    if (p == NULL)
+    {
         return 0;
     }
 
     /* Verifica se os vértices existem */
-    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2))
+    {
         return 0;
     }
 
     /* Verifica v1 -> v2 */
-    if (GBexisteArestaDir(p, v1, v2)) {
+    if (GBexisteArestaDir(p, v1, v2))
+    {
         return 1;
     }
 
     /* Verifica v2 -> v1 */
-    if (GBexisteArestaDir(p, v2, v1)) {
+    if (GBexisteArestaDir(p, v2, v1))
+    {
         return 1;
     }
 
     return 0;
 }
 
-int GApegaAresta(Grafo p, int v1, int v2) {
-    if (p == NULL) {
+int GApegaAresta(Grafo p, int v1, int v2)
+{
+    if (p == NULL)
+    {
         return 0;
     }
 
     /* Verifica se os vértices existem */
-    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2)) {
+    if (!GBexisteIdVertice(p, v1) || !GBexisteIdVertice(p, v2))
+    {
         return 0;
     }
 
     /* Procura v1 -> v2 */
     int aresta = GApegaArestaDir(p, v1, v2);
 
-    if (aresta != 0) {
+    if (aresta != 0)
+    {
         return aresta;
     }
 
     /* Procura v2 -> v1 */
     aresta = GApegaArestaDir(p, v2, v1);
 
-    if (aresta != 0) {
+    if (aresta != 0)
+    {
         return aresta;
     }
 
     return 0;
 }
 
-int GVprimeiroVertice(Grafo p) {
-    if (p == NULL) {
+int GVprimeiroVertice(Grafo p)
+{
+    if (p == NULL)
+    {
         return 0;
     }
 
-    for (int v = 1; v <= p->maxVertices; v++) {
-        if (p->vertice[v].primeiraSaida != -1) {
+    for (int v = 1; v <= p->maxVertices; v++)
+    {
+        if (p->vertice[v].primeiraSaida != -1)
+        {
             return v;
         }
     }
@@ -328,21 +367,26 @@ int GVprimeiroVertice(Grafo p) {
     return 0;
 }
 
-int GVproximoVertice(Grafo p, int v1) {
+int GVproximoVertice(Grafo p, int v1)
+{
     /* Valida se a estrutura do grafo existe */
-    if (p == NULL || p->vertice == NULL) {
+    if (p == NULL || p->vertice == NULL)
+    {
         return 0;
     }
 
     /* Ajusta v1 para 0 caso seja passado um valor negativo */
-    if (v1 < 0) {
+    if (v1 < 0)
+    {
         v1 = 0;
     }
 
     /* Procura o menor ID de vértice que seja maior que v1 */
-    for (int i = v1 + 1; i <= p->maxVertices; i++) {
+    for (int i = v1 + 1; i <= p->maxVertices; i++)
+    {
         /* Na sua estrutura, um vértice existe se primeiraSaida for diferente de -1 */
-        if (p->vertice[i].primeiraSaida != -1) {
+        if (p->vertice[i].primeiraSaida != -1)
+        {
             return i; /* Retorna o proximo vertice existente (v2) */
         }
     }
@@ -351,21 +395,26 @@ int GVproximoVertice(Grafo p, int v1) {
     return 0;
 }
 
-int GAproximaAresta(Grafo p, int a1) {
+int GAproximaAresta(Grafo p, int a1)
+{
     /* 1. Valida se a estrutura do grafo e o vetor de arestas existem */
-    if (p == NULL || p->aresta == NULL) {
+    if (p == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
     /* 2. Ajusta a1 caso seja passado um valor negativo */
-    if (a1 < 0) {
+    if (a1 < 0)
+    {
         a1 = 0;
     }
 
     /* 3. Procura o menor ID de aresta que seja maior que a1 */
-    for (int i = a1 + 1; i <= p->maxArestas; i++) {
+    for (int i = a1 + 1; i <= p->maxArestas; i++)
+    {
         /* Uma aresta valida possui alfa e omega definidos (diferentes de 0) */
-        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0) {
+        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0)
+        {
             return i; /* Retorna o ID da proxima aresta existente (a2) */
         }
     }
@@ -374,19 +423,24 @@ int GAproximaAresta(Grafo p, int a1) {
     return 0;
 }
 
-int GAprimeiraAresta(Grafo p) {
+int GAprimeiraAresta(Grafo p)
+{
     /* Retorna o menor ID de aresta existente (maior que 0) */
     return GAproximaAresta(p, 0);
 }
 
-int GInumeroVertices(Grafo p) {
-    if (p == NULL || p->vertice == NULL) {
+int GInumeroVertices(Grafo p)
+{
+    if (p == NULL || p->vertice == NULL)
+    {
         return 0;
     }
 
     int nv = 0;
-    for (int i = 1; i <= p->maxVertices; i++) {
-        if (p->vertice[i].primeiraSaida != -1) {
+    for (int i = 1; i <= p->maxVertices; i++)
+    {
+        if (p->vertice[i].primeiraSaida != -1)
+        {
             nv++;
         }
     }
@@ -394,9 +448,11 @@ int GInumeroVertices(Grafo p) {
     return nv;
 }
 
-int GInumeroVerticesMax(Grafo p) {
+int GInumeroVerticesMax(Grafo p)
+{
     /* 1. Valida se a estrutura do grafo existe */
-    if (p == NULL) {
+    if (p == NULL)
+    {
         return 0;
     }
 
@@ -404,9 +460,11 @@ int GInumeroVerticesMax(Grafo p) {
     return p->maxVertices;
 }
 
-int GInumeroArestas(Grafo p) {
+int GInumeroArestas(Grafo p)
+{
     /* 1. Valida se a estrutura do grafo existe */
-    if (p == NULL) {
+    if (p == NULL)
+    {
         return 0;
     }
 
@@ -414,9 +472,11 @@ int GInumeroArestas(Grafo p) {
     return p->numArestas;
 }
 
-int GInumeroArestasMax(Grafo p) {
+int GInumeroArestasMax(Grafo p)
+{
     /* 1. Valida se a estrutura do grafo existe */
-    if (p == NULL) {
+    if (p == NULL)
+    {
         return 0;
     }
 
@@ -424,34 +484,42 @@ int GInumeroArestasMax(Grafo p) {
     return p->maxArestas;
 }
 
-Grafo GGcarregaGrafo(char *f) {
-    if (f == NULL) return NULL;
+Grafo GGcarregaGrafo(char *f)
+{
+    if (f == NULL)
+        return NULL;
 
     FILE *arquivo = fopen(f, "r");
-    if (arquivo == NULL) {
+    if (arquivo == NULL)
+    {
         printf(">> Erro: Nao foi possivel abrir o arquivo '%s'.\n", f);
         return NULL;
     }
 
     int maxV, maxA;
-    if (fscanf(arquivo, "%d %d", &maxV, &maxA) != 2) {
+    if (fscanf(arquivo, "%d %d", &maxV, &maxA) != 2)
+    {
         fclose(arquivo);
         return NULL;
     }
 
     Grafo p = GGcriaGrafo(maxV, maxA);
-    if (p == NULL) {
+    if (p == NULL)
+    {
         fclose(arquivo);
         return NULL;
     }
 
     int alfa, omega;
-    while (fscanf(arquivo, "%d %d", &alfa, &omega) == 2) {
+    while (fscanf(arquivo, "%d %d", &alfa, &omega) == 2)
+    {
         /* Cria vértices dinamicamente caso o ID lido seja maior que a quantidade atual */
-        while (GInumeroVertices(p) < alfa) {
+        while (GInumeroVertices(p) < alfa)
+        {
             GVcriaVertice(p);
         }
-        while (GInumeroVertices(p) < omega) {
+        while (GInumeroVertices(p) < omega)
+        {
             GVcriaVertice(p);
         }
 
@@ -463,16 +531,18 @@ Grafo GGcarregaGrafo(char *f) {
     return p;
 }
 
-
-int GBsalvaGrafo(Grafo p, char *f) {
+int GBsalvaGrafo(Grafo p, char *f)
+{
     /* 1. Validações prévias */
-    if (p == NULL || f == NULL) {
+    if (p == NULL || f == NULL)
+    {
         return 0;
     }
 
     /* 2. Tenta abrir o arquivo para escrita */
     FILE *arquivo = fopen(f, "w");
-    if (arquivo == NULL) {
+    if (arquivo == NULL)
+    {
         printf(">> Erro: Nao foi possivel criar ou abrir o arquivo '%s' para escrita.\n", f);
         return 0;
     }
@@ -481,8 +551,10 @@ int GBsalvaGrafo(Grafo p, char *f) {
     fprintf(arquivo, "%d %d\n", p->maxVertices, p->maxArestas);
 
     /* 4. Percorre o vetor de arestas e salva apenas as ativas */
-    for (int i = 1; i <= p->maxArestas; i++) {
-        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0) {
+    for (int i = 1; i <= p->maxArestas; i++)
+    {
+        if (p->aresta[i].alfa != 0 && p->aresta[i].omega != 0)
+        {
             fprintf(arquivo, "%d %d\n", p->aresta[i].alfa, p->aresta[i].omega);
         }
     }
@@ -492,20 +564,24 @@ int GBsalvaGrafo(Grafo p, char *f) {
     return 1;
 }
 
-int GIpegaGrau(Grafo p, int v) {
+int GIpegaGrau(Grafo p, int v)
+{
     /* 1. Valida se o grafo e o vetor de vertices existem */
-    if (p == NULL || p->vertice == NULL) {
+    if (p == NULL || p->vertice == NULL)
+    {
         return 0;
     }
 
     /* 2. Valida se o identificador do vertice e valido */
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
     /* 3. Verifica se o vertice existe/esta ativo no grafo */
     /* Assumindo que um vertice inativo possui primeiraSaida e primeiraEntrada como -1 ou sem registro */
-    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1) {
+    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1)
+    {
         return 0;
     }
 
@@ -513,14 +589,16 @@ int GIpegaGrau(Grafo p, int v) {
 
     /* 4. Conta as arestas na Estrela de Saida (Arestas saindo de v) */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
+    while (a > 0)
+    {
         grau++;
         a = p->aresta[a].proxSaida;
     }
 
     /* 5. Conta as arestas na Estrela de Entrada (Arestas chegando em v) */
     a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
+    while (a > 0)
+    {
         grau++;
         a = p->aresta[a].proxEntrada;
     }
@@ -528,8 +606,10 @@ int GIpegaGrau(Grafo p, int v) {
     return grau;
 }
 
-int GAprimaAresta(Grafo p, int v) {
-    if (p == NULL || p->vertice == NULL || v <= 0 || v > p->maxVertices) {
+int GAprimaAresta(Grafo p, int v)
+{
+    if (p == NULL || p->vertice == NULL || v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -537,8 +617,10 @@ int GAprimaAresta(Grafo p, int v) {
 
     /* 1. Percorre toda a estrela de SAÍDA procurando o menor ID de aresta */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
-        if (menorAresta == 0 || a < menorAresta) {
+    while (a > 0)
+    {
+        if (menorAresta == 0 || a < menorAresta)
+        {
             menorAresta = a;
         }
         a = p->aresta[a].proxSaida;
@@ -546,8 +628,10 @@ int GAprimaAresta(Grafo p, int v) {
 
     /* 2. Percorre toda a estrela de ENTRADA procurando se há algum ID menor ainda */
     a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
-        if (menorAresta == 0 || a < menorAresta) {
+    while (a > 0)
+    {
+        if (menorAresta == 0 || a < menorAresta)
+        {
             menorAresta = a;
         }
         a = p->aresta[a].proxEntrada;
@@ -557,13 +641,16 @@ int GAprimaAresta(Grafo p, int v) {
     return menorAresta;
 }
 
-int GAproxAresta(Grafo p, int v, int a1) {
+int GAproxAresta(Grafo p, int v, int a1)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -571,9 +658,12 @@ int GAproxAresta(Grafo p, int v, int a1) {
 
     /* 2. Percorre a Estrela de Saída de v */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
-        if (a > a1) {
-            if (menorProxima == 0 || a < menorProxima) {
+    while (a > 0)
+    {
+        if (a > a1)
+        {
+            if (menorProxima == 0 || a < menorProxima)
+            {
                 menorProxima = a;
             }
         }
@@ -582,9 +672,12 @@ int GAproxAresta(Grafo p, int v, int a1) {
 
     /* 3. Percorre a Estrela de Entrada de v */
     a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
-        if (a > a1) {
-            if (menorProxima == 0 || a < menorProxima) {
+    while (a > 0)
+    {
+        if (a > a1)
+        {
+            if (menorProxima == 0 || a < menorProxima)
+            {
                 menorProxima = a;
             }
         }
@@ -595,13 +688,16 @@ int GAproxAresta(Grafo p, int v, int a1) {
     return menorProxima;
 }
 
-int GAprimaEntrada(Grafo p, int v) {
+int GAprimaEntrada(Grafo p, int v)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -609,8 +705,10 @@ int GAprimaEntrada(Grafo p, int v) {
 
     /* 2. Percorre apenas a Estrela de Entrada de v (EE(v)) */
     int a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
-        if (menorAresta == 0 || a < menorAresta) {
+    while (a > 0)
+    {
+        if (menorAresta == 0 || a < menorAresta)
+        {
             menorAresta = a;
         }
         a = p->aresta[a].proxEntrada;
@@ -620,13 +718,16 @@ int GAprimaEntrada(Grafo p, int v) {
     return menorAresta;
 }
 
-int GAproxEntrada(Grafo p, int v, int a1) {
+int GAproxEntrada(Grafo p, int v, int a1)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -634,9 +735,12 @@ int GAproxEntrada(Grafo p, int v, int a1) {
 
     /* 2. Percorre apenas a Estrela de Entrada de v (EE(v)) */
     int a = p->vertice[v].primeiraEntrada;
-    while (a > 0) {
-        if (a > a1) {
-            if (menorProxima == 0 || a < menorProxima) {
+    while (a > 0)
+    {
+        if (a > a1)
+        {
+            if (menorProxima == 0 || a < menorProxima)
+            {
                 menorProxima = a;
             }
         }
@@ -647,13 +751,16 @@ int GAproxEntrada(Grafo p, int v, int a1) {
     return menorProxima;
 }
 
-int GAprimaSaida(Grafo p, int v) {
+int GAprimaSaida(Grafo p, int v)
+{
     /* 1. Validações preliminares */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -661,8 +768,10 @@ int GAprimaSaida(Grafo p, int v) {
 
     /* 2. Percorre apenas a Estrela de Saída de v (ES(v)) */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
-        if (menorAresta == 0 || a < menorAresta) {
+    while (a > 0)
+    {
+        if (menorAresta == 0 || a < menorAresta)
+        {
             menorAresta = a;
         }
         a = p->aresta[a].proxSaida;
@@ -672,13 +781,16 @@ int GAprimaSaida(Grafo p, int v) {
     return menorAresta;
 }
 
-int GAproxSaida(Grafo p, int v, int a1) {
+int GAproxSaida(Grafo p, int v, int a1)
+{
     /* 1. Validações preliminares de segurança */
-    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL)
+    {
         return 0;
     }
 
-    if (v <= 0 || v > p->maxVertices) {
+    if (v <= 0 || v > p->maxVertices)
+    {
         return 0;
     }
 
@@ -686,11 +798,14 @@ int GAproxSaida(Grafo p, int v, int a1) {
 
     /* 2. Percorre a Estrela de Saída de v (ES(v)) */
     int a = p->vertice[v].primeiraSaida;
-    while (a > 0) {
+    while (a > 0)
+    {
         /* Filtra apenas arestas com ID estritamente maior que a1 */
-        if (a > a1) {
+        if (a > a1)
+        {
             /* Busca o menor ID entre os válidos (min(a2) > a1) */
-            if (menorProxima == 0 || a < menorProxima) {
+            if (menorProxima == 0 || a < menorProxima)
+            {
                 menorProxima = a;
             }
         }
@@ -737,6 +852,7 @@ void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta) {
         ant = a;
         a = p->aresta[a].proxEntrada;
     }
+
 }
 
 int GAremoveVertice(Grafo p, int v) {
@@ -771,6 +887,7 @@ int GAremoveVertice(Grafo p, int v) {
 
         a = proximaAresta;
     }
+
 
     /* 3. Remover todas as arestas da Estrela de Entrada de v (arestas que ENTRAM em v) */
     a = p->vertice[v].primeiraEntrada;
@@ -858,3 +975,73 @@ int GAremoveAresta(Grafo p, int idAresta) {
 
     return 1; /* Sucesso */
 }
+int GBarestaLaco(Grafo p, int a)
+{
+    if (p == NULL)
+    {
+        return 0;
+    }
+
+    if (!GBexisteIdAresta(p, a))
+    {
+        return 0;
+    }
+
+    return p->aresta[a].alfa == p->aresta[a].omega;
+}
+
+int GValfa(Grafo p, int a)
+{
+    if (p == NULL)
+    {
+        return 0;
+    }
+
+    if (!GBexisteIdAresta(p, a))
+    {
+        return 0;
+    }
+
+    return p->aresta[a].alfa;
+}
+
+int GVomega(Grafo p, int a)
+{
+    if (p == NULL)
+    {
+        return 0;
+    }
+
+    if (!GBexisteIdAresta(p, a))
+    {
+        return 0;
+    }
+
+    return p->aresta[a].omega;
+}
+
+int GVvizinho(Grafo p, int a, int v1)
+{
+    if (p == NULL)
+    {
+        return 0;
+    }
+
+    if (!GBexisteIdAresta(p, a))
+    {
+        return 0;
+    }
+
+    if (p->aresta[a].alfa == v1)
+    {
+        return p->aresta[a].omega;
+    }
+
+    if (p->aresta[a].omega == v1)
+    {
+        return p->aresta[a].alfa;
+    }
+
+    return 0;
+}
+

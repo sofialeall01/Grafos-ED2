@@ -117,15 +117,15 @@ int GAremoveAresta(Grafo p, int idAresta);
 //  * ============================================================================ */
 
 // /* Verifica se a aresta 'a' é um laço (liga um vértice a ele mesmo) */
-// int GBarestaLaco(Grafo p, int a);
+int GBarestaLaco(Grafo p, int a);
 
 // /* Retorna o vértice de partida (origem/alfa) da aresta 'a' */
-// int GValfa(Grafo p, int a);
+int GValfa(Grafo p, int a);
 
 // /* Retorna o vértice de chegada (destino/omega) da aresta 'a' */
-// int GVomega(Grafo p, int a);
+int GVomega(Grafo p, int a);
 
 // /* Retorna o vértice oposto a v1 conectado pela aresta 'a' */
-// int GVvizinho(Grafo p, int a, int v1);
+int GVvizinho(Grafo p, int a, int v1);
 
 #endif /* GRAFO_H */
