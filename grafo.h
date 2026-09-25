@@ -100,6 +100,18 @@ int GAprimaSaida(Grafo p, int v);
 /* Retorna a próxima aresta na estrela de saída do vértice v após a1 (dirigidos) */
 int GAproxSaida(Grafo p, int v, int a1);
 
+/* Remove uma aresta específica da lista de saída do vértice 'alfa' */
+void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta);
+
+/* Remove uma aresta específica da lista de entrada do vértice 'omega' */
+void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta);
+
+ /* Remove um vértice do grafo, liberando suas arestas e atualizando as listas de adjacência */
+int GAremoveVertice(Grafo p, int v) ;
+
+/* Remove uma aresta do grafo, atualizando as listas de adjacência dos vértices envolvidos */
+int GAremoveAresta(Grafo p, int idAresta);
+
 // /* ============================================================================
 //  * 2.2.3 Operações relacionadas às arestas do grafo
 //  * ============================================================================ */

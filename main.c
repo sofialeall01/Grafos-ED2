@@ -534,9 +534,50 @@ void exibirMenu(Grafo *g) {
                     }
                 }
                 break;
+                case 32:            
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int v, removido;
+                    printf("Digite o ID do vertice a ser removido: ");
+                    scanf("%d", &v);
+
+                    removido = GAremoveVertice(*g, v);
+
+                    if (removido) {
+                        printf(">> Vertice %d e suas arestas incidentes foram removidos com sucesso!\n", v);
+                    } else {
+                        printf(">> Falha ao remover o vertice %d (ID invalido ou ja removido).\n", v);
+                    }
+                }
+                break;
+
+                case 33:
+                if (*g == NULL) { 
+                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
+                    break; 
+                }
+                {
+                    int idAresta, removido;
+                    printf("Digite o ID da aresta a ser removida: ");
+                    scanf("%d", &idAresta);
+
+                    removido = GAremoveAresta(*g, idAresta);
+
+                    if (removido) {
+                        printf(">> Aresta %d removida com sucesso!\n", idAresta);
+                    } else {
+                        printf(">> Falha ao remover a aresta %d (ID invalido, fora do limite ou ja removida).\n", idAresta);
+                    }
+                }
+                break;
                 case 0:
                 printf("\n>> Encerrando o programa...\n");
                 break;
+                
+  
 
             default:
                 printf("\n>> Opcao invalida! Tente novamente.\n");

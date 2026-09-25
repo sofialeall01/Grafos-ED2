@@ -145,30 +145,49 @@ int GVcriaVertice(Grafo p) {
 
 int GAcriaAresta(Grafo p, int alfa, int omega) {
 
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
     if (p->numArestas >= p->maxArestas) {
         return 0;
     }
 
     int numVertices = p->vertice[0].primeiraSaida;
 
-    /*Verifica se o alfa e o omega existem */
+    /* Verifica se o alfa e o omega existem */
     if (alfa <= 0 || alfa > numVertices ||
         omega <= 0 || omega > numVertices) {
         return 0;
     }
 
+    /* -------------------------------------------------------------
+     * VALIDAÇÃO DE ARESTAS DUPLICADAS:
+     * Percorre a Estrela de Saída de 'alfa' para verificar se
+     * já existe uma aresta que chegue em 'omega'.
+     * ------------------------------------------------------------- */
+    int a = p->vertice[alfa].primeiraSaida;
+    while (a > 0) {
+        if (p->aresta[a].omega == omega) {
+            /* Aresta duplicada encontrada! Interrompe a criação. */
+            return 0; 
+        }
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* Criação da nova aresta caso não haja duplicata */
     p->numArestas++;
     int idAresta = p->numArestas;
 
-    /*Guarda a origem e o destino*/
+    /* Guarda a origem e o destino */
     p->aresta[idAresta].alfa = alfa;
     p->aresta[idAresta].omega = omega;
 
-    /*Add a aresta na saída do alfa*/
+    /* Add a aresta na Estrela de Saída de alfa */
     p->aresta[idAresta].proxSaida = p->vertice[alfa].primeiraSaida;
     p->vertice[alfa].primeiraSaida = idAresta;
     
-    /*Add a aresta na saída do omega*/
+    /* Add a aresta na Estrela de Entrada de omega */
     p->aresta[idAresta].proxEntrada = p->vertice[omega].primeiraEntrada;
     p->vertice[omega].primeiraEntrada = idAresta;
 
@@ -680,4 +699,162 @@ int GAproxSaida(Grafo p, int v, int a1) {
 
     /* Retorna o menor ID encontrado que atende à condição (ou 0 se não existir) */
     return menorProxima;
+}
+
+/* Remove uma aresta específica da lista de saída do vértice 'alfa' */
+void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta) {
+    int a = p->vertice[alfa].primeiraSaida;
+    int ant = 0;
+
+    while (a > 0) {
+        if (a == idAresta) {
+            if (ant == 0) {
+                p->vertice[alfa].primeiraSaida = p->aresta[a].proxSaida;
+            } else {
+                p->aresta[ant].proxSaida = p->aresta[a].proxSaida;
+            }
+            break;
+        }
+        ant = a;
+        a = p->aresta[a].proxSaida;
+    }
+}
+
+/* Remove uma aresta específica da lista de entrada do vértice 'omega' */
+void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta) {
+    int a = p->vertice[omega].primeiraEntrada;
+    int ant = 0;
+
+    while (a > 0) {
+        if (a == idAresta) {
+            if (ant == 0) {
+                p->vertice[omega].primeiraEntrada = p->aresta[a].proxEntrada;
+            } else {
+                p->aresta[ant].proxEntrada = p->aresta[a].proxEntrada;
+            }
+            break;
+        }
+        ant = a;
+        a = p->aresta[a].proxEntrada;
+    }
+}
+
+int GAremoveVertice(Grafo p, int v) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    int numVertices = p->vertice[0].primeiraSaida;
+    if (v <= 0 || v > numVertices) {
+        return 0;
+    }
+
+    /* Se o vértice já foi removido (marcado como -1) */
+    if (p->vertice[v].primeiraSaida == -1 && p->vertice[v].primeiraEntrada == -1) {
+        return 0;
+    }
+
+    /* 2. Remover todas as arestas da Estrela de Saída de v (arestas que SAEM de v) */
+    int a = p->vertice[v].primeiraSaida;
+    while (a > 0) {
+        int proximaAresta = p->aresta[a].proxSaida;
+        int dest = p->aresta[a].omega;
+
+        /* Remove a aresta 'a' da estrela de entrada do vértice de destino */
+        removeDaEstrelaEntrada(p, dest, a);
+
+        /* Invalida a aresta */
+        p->aresta[a].alfa = 0;
+        p->aresta[a].omega = 0;
+        p->numArestas--;
+
+        a = proximaAresta;
+    }
+
+    /* 3. Remover todas as arestas da Estrela de Entrada de v (arestas que ENTRAM em v) */
+    a = p->vertice[v].primeiraEntrada;
+    while (a > 0) {
+        int proximaAresta = p->aresta[a].proxEntrada;
+        int orig = p->aresta[a].alfa;
+
+        /* Remove a aresta 'a' da estrela de saída do vértice de origem */
+        removeDaEstrelaSaida(p, orig, a);
+
+        /* Invalida a aresta */
+        p->aresta[a].alfa = 0;
+        p->aresta[a].omega = 0;
+        p->numArestas--;
+
+        a = proximaAresta;
+    }
+
+    /* 4. Marcar o vértice v como removido */
+    p->vertice[v].primeiraSaida = -1;
+    p->vertice[v].primeiraEntrada = -1;
+
+    return 1; /* Sucesso */
+}
+
+int GAremoveAresta(Grafo p, int idAresta) {
+    /* 1. Validações preliminares */
+    if (p == NULL || p->vertice == NULL || p->aresta == NULL) {
+        return 0;
+    }
+
+    if (idAresta <= 0 || idAresta > p->maxArestas) {
+        return 0;
+    }
+
+    int alfa = p->aresta[idAresta].alfa;
+    int omega = p->aresta[idAresta].omega;
+
+    /* Verifica se a aresta já está inativa/removida */
+    if (alfa <= 0 || omega <= 0) {
+        return 0;
+    }
+
+    /* 2. Remoção da Estrela de Saída do vértice 'alfa' */
+    int a = p->vertice[alfa].primeiraSaida;
+    int ant = 0;
+
+    while (a > 0) {
+        if (a == idAresta) {
+            if (ant == 0) {
+                p->vertice[alfa].primeiraSaida = p->aresta[a].proxSaida;
+            } else {
+                p->aresta[ant].proxSaida = p->aresta[a].proxSaida;
+            }
+            break;
+        }
+        ant = a;
+        a = p->aresta[a].proxSaida;
+    }
+
+    /* 3. Remoção da Estrela de Entrada do vértice 'omega' */
+    a = p->vertice[omega].primeiraEntrada;
+    ant = 0;
+
+    while (a > 0) {
+        if (a == idAresta) {
+            if (ant == 0) {
+                p->vertice[omega].primeiraEntrada = p->aresta[a].proxEntrada;
+            } else {
+                p->aresta[ant].proxEntrada = p->aresta[a].proxEntrada;
+            }
+            break;
+        }
+        ant = a;
+        a = p->aresta[a].proxEntrada;
+    }
+
+    /* 4. Limpeza da aresta no vetor e atualização de numArestas */
+    p->aresta[idAresta].alfa = 0;
+    p->aresta[idAresta].omega = 0;
+    p->aresta[idAresta].proxSaida = 0;
+    p->aresta[idAresta].proxEntrada = 0;
+
+    p->numArestas--;
+
+    return 1; /* Sucesso */
 }
