@@ -7,7 +7,8 @@ int existe;
 int v1, v2;
 int a1, a2;
 
-int main(void) {
+int main(void)
+{
     Grafo g = NULL;
 
     printf("======================================================\n");
@@ -16,7 +17,8 @@ int main(void) {
 
     exibirMenu(&g);
 
-    if (g != NULL) {
+    if (g != NULL)
+    {
         GGdestroiGrafo(g);
         printf(">> Memoria do grafo liberada com sucesso.\n");
     }
@@ -25,12 +27,14 @@ int main(void) {
     return 0;
 }
 
-void exibirMenu(Grafo *g) {
+void exibirMenu(Grafo *g)
+{
     int opcao = -1;
     int id;
     int maxV, maxA;
 
-    while (opcao != 0) {
+    while (opcao != 0)
+    {
         printf("\n+----------------------------------- MENU GRAFO -----------------------------------+\n");
         printf("| [ESTRUTURA]                         | [ITERACAO & PROPRIEDADES]                  |\n");
         printf("|  01-Criar novo grafo                |  11-Pegar primeiro vertice                 |\n");
@@ -50,6 +54,8 @@ void exibirMenu(Grafo *g) {
         printf("|                                     |  27-Proxima aresta de saida                |\n");
         printf("| [ARQUIVOS]                          |  28-Verificar se e laco                    |\n");
         printf("|  19-Carregar grafo de arquivo       |  20-Salvar grafo em arquivo                |\n");
+        printf("|                                     |  29-Pegar vertice de partida               |\n");
+        printf("|                                     |  30-Pegar vertice de chegada               |\n");
         printf("| [CAMINHO CURTO]                     |  31-Pegar vertice vizinho                  |\n");
         printf("|  34-Encontrar menor caminho         |                                            |\n");
         printf("+-------------------------------------+--------------------------------------------+\n");
@@ -57,490 +63,680 @@ void exibirMenu(Grafo *g) {
         printf("+----------------------------------------------------------------------------------+\n");
 
         printf("Escolha uma opcao: ");
-        if (scanf("%d", &opcao) != 1) {
+        if (scanf("%d", &opcao) != 1)
+        {
             /* Limpa o buffer de entrada caso o usuario digite algo invalido */
-            while (getchar() != '\n');
+            while (getchar() != '\n')
+                ;
             opcao = -1;
             continue;
         }
 
-        switch (opcao) {
-            case 1:
-                printf("\nDigite o numero maximo de vertices (v): ");
-                scanf("%d", &maxV);
-                printf("Digite o numero maximo de arestas (a): ");
-                scanf("%d", &maxA);
-                
-                if (*g != NULL) {
-                    *g = GGdestroiGrafo(*g);
-                }
-                
-                *g = GGcriaGrafo(maxV, maxA);
-                if (*g != NULL) {
-                    printf(">> Grafo vazio criado com sucesso! (Capacidade: %d vertices, %d arestas)\n", maxV, maxA);
-                } else {
-                    printf(">> Falha ao criar o grafo. Verifique os limites inseridos.\n");
-                }
+        switch (opcao)
+        {
+        case 1:
+            printf("\nDigite o numero maximo de vertices (v): ");
+            scanf("%d", &maxV);
+            printf("Digite o numero maximo de arestas (a): ");
+            scanf("%d", &maxA);
+
+            if (*g != NULL)
+            {
+                *g = GGdestroiGrafo(*g);
+            }
+
+            *g = GGcriaGrafo(maxV, maxA);
+            if (*g != NULL)
+            {
+                printf(">> Grafo vazio criado com sucesso! (Capacidade: %d vertices, %d arestas)\n", maxV, maxA);
+            }
+            else
+            {
+                printf(">> Falha ao criar o grafo. Verifique os limites inseridos.\n");
+            }
+            break;
+
+        case 2:
+            if (*g == NULL)
+            {
+                printf(">> Nao existe grafo alocado para destruir.\n");
+            }
+            else
+            {
+                *g = GGdestroiGrafo(*g);
+                printf(">> Grafo destruido e memoria liberada com sucesso!\n");
+            }
+            break;
+
+        case 3:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            id = GVcriaVertice(*g);
+            if (id > 0)
+            {
+                printf(">> Vertice criado com sucesso! ID do Vertice: %d\n", id);
+            }
+            else
+            {
+                printf(">> Nao foi possivel criar o vertice (limite maximo atingido).\n");
+            }
+            break;
+        case 4:
 
-            case 2:
-                if (*g == NULL) {
-                    printf(">> Nao existe grafo alocado para destruir.\n");
-                } else {
-                    *g = GGdestroiGrafo(*g);
-                    printf(">> Grafo destruido e memoria liberada com sucesso!\n");
-                }
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
 
-            case 3:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-                id = GVcriaVertice(*g);
-                if (id > 0) {
-                    printf(">> Vertice criado com sucesso! ID do Vertice: %d\n", id);
-                } else {
-                    printf(">> Nao foi possivel criar o vertice (limite maximo atingido).\n");
-                }
+            int alfa, omega;
+            printf("Digite o vértice de origem(alfa): ");
+            scanf("%d", &alfa);
+
+            printf("Digite o vértice de destino(omega): ");
+            scanf("%d", &omega);
+
+            int aresta = GAcriaAresta(*g, alfa, omega);
+            if (aresta == 0)
+            {
+                printf("Não foi possivel criar a aresta.\n");
+            }
+            else
+            {
+                printf("Aresta criada com sucesso! ID: %d\n", aresta);
+            }
+            break;
+
+        case 5:
+            int identificadorVertice;
+
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-            case 4:  
+            }
 
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            printf("Digite o id do vértice:");
+            scanf("%d", &identificadorVertice);
 
-                int alfa, omega;
-                printf("Digite o vértice de origem(alfa): ");
-                scanf("%d", &alfa);
+            existe = GBexisteIdVertice(*g, identificadorVertice);
 
-                printf("Digite o vértice de destino(omega): ");
-                scanf("%d", &omega);
+            if (existe == 0)
+            {
+                printf(">> O vértice não existe.\n");
+            }
+            else
+            {
+                printf(">> O vértice existe.");
+            }
+            break;
 
-                int aresta = GAcriaAresta(*g, alfa, omega);
-                if (aresta == 0) {
-                    printf("Não foi possivel criar a aresta.\n");
-                } else {
-                    printf("Aresta criada com sucesso! ID: %d\n", aresta);
-                }
+        case 6:
+
+            int identificadorAresta;
+
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
 
-            case 5:
-                int identificadorVertice;
+            printf("Digite o id da aresta:");
+            scanf("%d", &identificadorAresta);
 
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            existe = GBexisteIdAresta(*g, identificadorAresta);
 
-                printf("Digite o id do vértice:");
-                scanf("%d", &identificadorVertice);
+            if (existe == 0)
+            {
+                printf(">> A aresta não existe.\n");
+            }
+            else
+            {
+                printf(">> A aresta existe.");
+            }
+            break;
 
-                existe = GBexisteIdVertice(*g, identificadorVertice);
-
-                if(existe == 0){
-                    printf(">> O vértice não existe.\n");
-                }else{
-                    printf(">> O vértice existe.");
-                }
+        case 7:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
 
-            case 6:
+            printf("Digite o id do vértice de partida:");
+            scanf("%d", &v1);
 
-                int identificadorAresta;
+            printf("Digite o id do vértice de chegada:");
+            scanf("%d", &v2);
 
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            existe = GBexisteArestaDir(*g, v1, v2);
 
-                printf("Digite o id da aresta:");
-                scanf("%d", &identificadorAresta);
+            if (existe == 0)
+            {
+                printf(">> A aresta dirigida não existe.\n");
+            }
+            else
+            {
+                printf(">> A aresta dirigida existe.");
+            }
 
-                existe = GBexisteIdAresta(*g, identificadorAresta);
-
-                if(existe == 0){
-                    printf(">> A aresta não existe.\n");
-                }else{
-                    printf(">> A aresta existe.");
-                }
+            break;
+        case 8:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
 
-            case 7:
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            printf("Digite o id do vértice 1:");
+            scanf("%d", &v1);
 
-                printf("Digite o id do vértice de partida:");
-                scanf("%d", &v1);
+            printf("Digite o id do vértice 2:");
+            scanf("%d", &v2);
 
-                printf("Digite o id do vértice de chegada:");
-                scanf("%d", &v2);
+            existe = GBexisteAresta(*g, v1, v2);
 
-                existe = GBexisteArestaDir(*g, v1, v2);
+            if (existe == 0)
+            {
+                printf(">> A aresta não dirigida não existe.\n");
+            }
+            else
+            {
+                printf(">> A aresta não dirigida existe.");
+            }
 
-                if(existe == 0){
-                    printf(">> A aresta dirigida não existe.\n");
-                }else{
-                    printf(">> A aresta dirigida existe.");
-                }
-                
+            break;
+        case 9:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-            case 8:
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            }
 
-                printf("Digite o id do vértice 1:");
-                scanf("%d", &v1);
+            printf("Digite o id do vértice de partida:");
+            scanf("%d", &v1);
 
-                printf("Digite o id do vértice 2:");
-                scanf("%d", &v2);
+            printf("Digite o id do vértice de chegada:");
+            scanf("%d", &v2);
 
-                existe = GBexisteAresta(*g, v1, v2);
+            existe = GApegaArestaDir(*g, v1, v2);
 
-                if(existe == 0){
-                    printf(">> A aresta não dirigida não existe.\n");
-                }else{
-                    printf(">> A aresta não dirigida existe.");
-                }
-                
+            if (existe == 0)
+            {
+                printf(">> A aresta dirigida não existe.\n");
+            }
+            else
+            {
+                printf(">> A aresta dirigida existe. Id: %d\n", existe);
+            }
+
+            break;
+        case 10:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-            case 9:
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            }
 
-                printf("Digite o id do vértice de partida:");
-                scanf("%d", &v1);
+            printf("Digite o id do vértice 1:");
+            scanf("%d", &v1);
 
-                printf("Digite o id do vértice de chegada:");
-                scanf("%d", &v2);
+            printf("Digite o id do vértice 2:");
+            scanf("%d", &v2);
 
-                existe = GApegaArestaDir(*g, v1, v2);
+            existe = GApegaAresta(*g, v1, v2);
 
-                if(existe == 0){
-                    printf(">> A aresta dirigida não existe.\n");
-                }else{
-                    printf(">> A aresta dirigida existe. Id: %d\n", existe);
-                }
-                
+            if (existe == 0)
+            {
+                printf(">> A aresta não dirigida não existe.\n");
+            }
+            else
+            {
+                printf(">> A aresta não dirigida existe. Id: %d\n", existe);
+            }
+
+            break;
+
+        case 11:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-            case 10:
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
+            }
+            existe = GVprimeiroVertice(*g);
+            if (existe == 0)
+            {
+                printf(">> Não existe vértice.\n");
+            }
+            else
+            {
+                printf(">> Id do primeiro vértice: %d\n", existe);
+            }
 
-                printf("Digite o id do vértice 1:");
-                scanf("%d", &v1);
+            break;
 
-                printf("Digite o id do vértice 2:");
-                scanf("%d", &v2);
-
-                existe = GApegaAresta(*g, v1, v2);
-
-                if(existe == 0){
-                    printf(">> A aresta não dirigida não existe.\n");
-                }else{
-                   printf(">> A aresta não dirigida existe. Id: %d\n", existe);
-                }
-                
+        case 12:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            printf("Digite o ID do vertice atual (v1): ");
+            scanf("%d", &v1);
 
-            case 11:
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
-                existe = GVprimeiroVertice(*g);
-                if(existe == 0){
-                    printf(">> Não existe vértice.\n");
-                }else{
-                   printf(">> Id do primeiro vértice: %d\n", existe);
-                }
-                
+            v2 = GVproximoVertice(*g, v1);
+
+            if (v2 != 0)
+            {
+                printf(">> O proximo vertice existente apos %d e: %d\n", v1, v2);
+            }
+            else
+            {
+                printf(">> Nao existe proximo vertice apos %d.\n", v1);
+            }
+            break;
+
+        case 13:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
 
-                case 12:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-                printf("Digite o ID do vertice atual (v1): ");
-                scanf("%d", &v1);
+            a1 = GAprimeiraAresta(*g);
 
-                v2 = GVproximoVertice(*g, v1);
+            if (a1 != 0)
+            {
+                printf(">> A primeira aresta do grafo e: %d\n", a1);
+            }
+            else
+            {
+                printf(">> O grafo nao possui arestas criadas.\n");
+            }
+            break;
 
-                if (v2 != 0) {
-                    printf(">> O proximo vertice existente apos %d e: %d\n", v1, v2);
-                } else {
-                    printf(">> Nao existe proximo vertice apos %d.\n", v1);
-                }
+        case 14:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            printf("Digite o ID da aresta atual (a1): ");
+            scanf("%d", &a1);
 
-                case 13:
-                    if (*g == NULL) { 
-                        printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                        break; 
-                    }
+            a2 = GAproximaAresta(*g, a1);
 
-                    a1 = GAprimeiraAresta(*g);
+            if (a2 != 0)
+            {
+                printf(">> A proxima aresta existente apos %d e: %d\n", a1, a2);
+            }
+            else
+            {
+                printf(">> Nao existe proxima aresta apos %d.\n", a1);
+            }
+            break;
 
-                    if (a1 != 0) {
-                        printf(">> A primeira aresta do grafo e: %d\n", a1);
-                    } else {
-                        printf(">> O grafo nao possui arestas criadas.\n");
-                    }
-                    break;
+        case 15:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
 
-                case 14:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
+            int nv = GInumeroVertices(*g);
+            printf(">> Numero total de vertices (|V|): %d\n", nv);
+            break;
+
+        case 16:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+
+            int maxV = GInumeroVerticesMax(*g);
+            printf(">> Numero maximo de vertices previsto: %d\n", maxV);
+            break;
+
+        case 17:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+
+            int na = GInumeroArestas(*g);
+            printf(">> Numero total de arestas (|A|): %d\n", na);
+            break;
+
+        case 18:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+
+            int maxA = GInumeroArestasMax(*g);
+            printf(">> Numero maximo de arestas previsto: %d\n", maxA);
+            break;
+
+        case 19:
+        {
+            char nomeArquivo[100];
+            printf("Digite o nome do arquivo a ser carregado (ex: grafo.txt): ");
+            scanf("%99s", nomeArquivo);
+
+            /* Se ja houver um grafo alocado, destroi antes de carregar o novo */
+            if (*g != NULL)
+            {
+                GGdestroiGrafo(*g);
+                *g = NULL;
+            }
+
+            *g = GGcarregaGrafo(nomeArquivo);
+
+            if (*g != NULL)
+            {
+                printf(">> Grafo carregado com sucesso a partir de '%s'!\n", nomeArquivo);
+            }
+            else
+            {
+                printf(">> Falha ao carregar o grafo.\n");
+            }
+        }
+        break;
+
+        case 20:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+            {
+                char nomeArquivo[100];
+                printf("Digite o nome do arquivo para salvar (ex: grafo_salvo.txt): ");
+                scanf("%99s", nomeArquivo);
+
+                if (GBsalvaGrafo(*g, nomeArquivo))
+                {
+                    printf(">> Grafo salvo com sucesso em '%s'!\n", nomeArquivo);
                 }
+                else
+                {
+                    printf(">> Falha ao salvar o grafo em arquivo.\n");
+                }
+            }
+            break;
+
+        case 21:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+            {
+                int v;
+                printf("Digite o ID do vertice para consultar o grau: ");
+                scanf("%d", &v);
+
+                int grau = GIpegaGrau(*g, v);
+                printf(">> O grau do vertice %d e: %d\n", v, grau);
+            }
+            break;
+
+        case 22:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+            {
+                int v;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
+
+                a1 = GAprimaAresta(*g, v);
+
+                if (a1 != 0)
+                {
+                    printf(">> A primeira aresta na estrela do vertice %d e: %d\n", v, a1);
+                }
+                else
+                {
+                    printf(">> O vertice %d nao possui arestas incidentes.\n", v);
+                }
+            }
+            break;
+
+        case 23:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+            {
+                int v, a1, a2;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
                 printf("Digite o ID da aresta atual (a1): ");
                 scanf("%d", &a1);
 
-                a2 = GAproximaAresta(*g, a1);
+                a2 = GAproxAresta(*g, v, a1);
 
-                if (a2 != 0) {
-                    printf(">> A proxima aresta existente apos %d e: %d\n", a1, a2);
-                } else {
-                    printf(">> Nao existe proxima aresta apos %d.\n", a1);
-                }
-                break;
-
-                case 15:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-
-                int nv = GInumeroVertices(*g);
-                printf(">> Numero total de vertices (|V|): %d\n", nv);
-                break;
-
-                
-                case 16:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-
-                int maxV = GInumeroVerticesMax(*g);
-                printf(">> Numero maximo de vertices previsto: %d\n", maxV);
-                break;
-                
-                case 17:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-
-                int na = GInumeroArestas(*g);
-                printf(">> Numero total de arestas (|A|): %d\n", na);
-                break;
-
-                 case 18:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-                
-                int maxA = GInumeroArestasMax(*g);
-                printf(">> Numero maximo de arestas previsto: %d\n", maxA);
-                break;
-
-                case 19:
+                if (a2 != 0)
                 {
-                    char nomeArquivo[100];
-                    printf("Digite o nome do arquivo a ser carregado (ex: grafo.txt): ");
-                    scanf("%99s", nomeArquivo);
-
-                    /* Se ja houver um grafo alocado, destroi antes de carregar o novo */
-                    if (*g != NULL) {
-                        GGdestroiGrafo(*g);
-                        *g = NULL;
-                    }
-
-                    *g = GGcarregaGrafo(nomeArquivo);
-
-                    if (*g != NULL) {
-                        printf(">> Grafo carregado com sucesso a partir de '%s'!\n", nomeArquivo);
-                    } else {
-                        printf(">> Falha ao carregar o grafo.\n");
-                    }
+                    printf(">> A proxima aresta na estrela do vertice %d (apos %d) e: %d\n", v, a1, a2);
                 }
-                break;
-                
-                case 20:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                else
                 {
-                    char nomeArquivo[100];
-                    printf("Digite o nome do arquivo para salvar (ex: grafo_salvo.txt): ");
-                    scanf("%99s", nomeArquivo);
-
-                    if (GBsalvaGrafo(*g, nomeArquivo)) {
-                        printf(">> Grafo salvo com sucesso em '%s'!\n", nomeArquivo);
-                    } else {
-                        printf(">> Falha ao salvar o grafo em arquivo.\n");
-                    }
+                    printf(">> Nao ha proxima aresta na estrela do vertice %d apos a aresta %d.\n", v, a1);
                 }
+            }
+            break;
+        case 24:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            {
+                int v, a1;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
 
-                case 21:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                a1 = GAprimaEntrada(*g, v);
+
+                if (a1 != 0)
                 {
-                    int v;
-                    printf("Digite o ID do vertice para consultar o grau: ");
-                    scanf("%d", &v);
-
-                    int grau = GIpegaGrau(*g, v);
-                    printf(">> O grau do vertice %d e: %d\n", v, grau);
+                    printf(">> A primeira aresta na estrela de entrada do vertice %d e: %d\n", v, a1);
                 }
-                break;
-
-                case 22:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                else
                 {
-                    int v;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-
-                    a1 = GAprimaAresta(*g, v);
-
-                    if (a1 != 0) {
-                        printf(">> A primeira aresta na estrela do vertice %d e: %d\n", v, a1);
-                    } else {
-                        printf(">> O vertice %d nao possui arestas incidentes.\n", v);
-                    }
+                    printf(">> O vertice %d nao possui arestas na estrela de entrada.\n", v);
                 }
+            }
+            break;
+        case 25:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            {
+                int v, a1, a2;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
+                printf("Digite o ID da aresta atual (a1): ");
+                scanf("%d", &a1);
 
-                case 23:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                a2 = GAproxEntrada(*g, v, a1);
+
+                if (a2 != 0)
                 {
-                    int v, a1, a2;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-                    printf("Digite o ID da aresta atual (a1): ");
-                    scanf("%d", &a1);
-
-                    a2 = GAproxAresta(*g, v, a1);
-
-                    if (a2 != 0) {
-                        printf(">> A proxima aresta na estrela do vertice %d (apos %d) e: %d\n", v, a1, a2);
-                    } else {
-                        printf(">> Nao ha proxima aresta na estrela do vertice %d apos a aresta %d.\n", v, a1);
-                    }
+                    printf(">> A proxima aresta na estrela de entrada do vertice %d (apos %d) e: %d\n", v, a1, a2);
                 }
-                break;
-                case 24:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                else
                 {
-                    int v, a1;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-
-                    a1 = GAprimaEntrada(*g, v);
-
-                    if (a1 != 0) {
-                        printf(">> A primeira aresta na estrela de entrada do vertice %d e: %d\n", v, a1);
-                    } else {
-                        printf(">> O vertice %d nao possui arestas na estrela de entrada.\n", v);
-                    }
+                    printf(">> Nao ha proxima aresta na estrela de entrada do vertice %d apos a aresta %d.\n", v, a1);
                 }
+            }
+            break;
+
+        case 26:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-                case 25:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+            }
+            {
+                int v, a1;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
+
+                a1 = GAprimaSaida(*g, v);
+
+                if (a1 != 0)
                 {
-                    int v, a1, a2;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-                    printf("Digite o ID da aresta atual (a1): ");
-                    scanf("%d", &a1);
-
-                    a2 = GAproxEntrada(*g, v, a1);
-
-                    if (a2 != 0) {
-                        printf(">> A proxima aresta na estrela de entrada do vertice %d (apos %d) e: %d\n", v, a1, a2);
-                    } else {
-                        printf(">> Nao ha proxima aresta na estrela de entrada do vertice %d apos a aresta %d.\n", v, a1);
-                    }
+                    printf(">> A primeira aresta na estrela de saída do vertice %d e: %d\n", v, a1);
                 }
-                break;
-
-                case 26:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro.\n"); 
-                    break; 
-                }
+                else
                 {
-                    int v, a1;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-
-                    a1 = GAprimaSaida(*g, v);
-
-                    if (a1 != 0) {
-                        printf(">> A primeira aresta na estrela de saída do vertice %d e: %d\n", v, a1);
-                    } else {
-                        printf(">> O vertice %d nao possui arestas na estrela de saída.\n", v);
-                    }
+                    printf(">> O vertice %d nao possui arestas na estrela de saída.\n", v);
                 }
+            }
+            break;
+
+        case 27:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
+            {
+                int v, a1, a2;
+                printf("Digite o ID do vertice: ");
+                scanf("%d", &v);
+                printf("Digite o ID da aresta atual (a1): ");
+                scanf("%d", &a1);
 
-                case 27:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro.\n"); 
-                    break; 
-                }
+                a2 = GAproxSaida(*g, v, a1);
+
+                if (a2 != 0)
                 {
-                    int v, a1, a2;
-                    printf("Digite o ID do vertice: ");
-                    scanf("%d", &v);
-                    printf("Digite o ID da aresta atual (a1): ");
-                    scanf("%d", &a1);
-
-                    a2 = GAproxSaida(*g, v, a1);
-
-                    if (a2 != 0) {
-                        printf(">> A proxima aresta na estrela de saída do vertice %d (apos %d) e: %d\n", v, a1, a2);
-                    } else {
-                        printf(">> Nao ha proxima aresta na estrela de saída do vertice %d apos a aresta %d.\n", v, a1);
-                    }
+                    printf(">> A proxima aresta na estrela de saída do vertice %d (apos %d) e: %d\n", v, a1, a2);
                 }
+                else
+                {
+                    printf(">> Nao ha proxima aresta na estrela de saída do vertice %d apos a aresta %d.\n", v, a1);
+                }
+            }
+            break;
+        case 28:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-                case 0:
-                printf("\n>> Encerrando o programa...\n");
-                break;
+            }
 
-            default:
-                printf("\n>> Opcao invalida! Tente novamente.\n");
+            printf("Digite o ID da aresta: ");
+            scanf("%d", &a1);
+
+            if (!GBexisteIdAresta(*g, a1))
+            {
+                printf(">> A aresta não existe.\n");
+            }
+            else if (GBarestaLaco(*g, a1))
+            {
+                printf(">> A aresta é um laço.\n");
+            }
+            else
+            {
+                printf(">> A aresta não é um laço.\n");
+            }
+
+            break;
+
+        case 29:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
+            }
+
+            printf("Digite o ID da aresta: ");
+            scanf("%d", &a1);
+
+            int verticePartida = GValfa(*g, a1);
+
+            if (verticePartida != 0)
+            {
+                printf(">> Vértice de partida: %d\n", verticePartida);
+            }
+            else
+            {
+                printf(">> A aresta não existe.\n");
+            }
+
+            break;
+
+        case 30:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+
+            printf("Digite o ID da aresta: ");
+            scanf("%d", &a1);
+
+            int verticeChegada = GVomega(*g, a1);
+
+            if (verticeChegada != 0)
+            {
+                printf(">> Vértice de chegada: %d\n", verticeChegada);
+            }
+            else
+            {
+                printf(">> A aresta não existe.\n");
+            }
+
+            break;
+
+        case 31:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+
+            printf("Digite o ID da aresta: ");
+            scanf("%d", &a1);
+
+            printf("Digite o ID do vértice: ");
+            scanf("%d", &v1);
+
+            int vizinho = GVvizinho(*g, a1, v1);
+
+            if (vizinho != 0)
+            {
+                printf(">> Vértice vizinho: %d\n", vizinho);
+            }
+            else
+            {
+                printf(">> Não foi possível encontrar o vértice vizinho.\n");
+            }
+
+            break;
+        case 0:
+            printf("\n>> Encerrando o programa...\n");
+            break;
+
+        default:
+            printf("\n>> Opcao invalida! Tente novamente.\n");
+            break;
         }
     }
 }
