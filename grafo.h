@@ -1,14 +1,29 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-/* 
- * ============================================================================
- * DECLARAÇÃO OPACA DO TAD GRAFO
- * ============================================================================
- * O ponteiro 'Grafo' oculta os detalhes de implementação das structs internas,
- * garantindo o encapsulamento do Tipo Abstrato de Dados.
- */
-struct grafo;
+typedef struct
+{
+    int alfa;        /* Identificador do vértice de partida (origem) */
+    int omega;       /* Identificador do vértice de chegada (destino) */
+    int proxSaida;   /* Próxima aresta pertencente à Estrela de Saída de 'alfa' */
+    int proxEntrada; /* Próxima aresta pertencente à Estrela de Entrada de 'omega' */
+} Aresta;
+
+typedef struct
+{
+    int primeiraSaida;   /* ID da primeira aresta na Estrela de Saída deste vértice */
+    int primeiraEntrada; /* ID da primeira aresta na Estrela de Entrada deste vértice */
+} Vertice;
+
+struct grafo
+{
+    int maxVertices; /* Capacidade maxima prevista para vertices */
+    int maxArestas;  /* Capacidade maxima prevista para arestas */
+    int numArestas;
+    Vertice *vertice; /* Vetor alocado dinamicamente para os Vertices */
+    Aresta *aresta;   /* Vetor alocado dinamicamente para as Arestas */
+};
+
 typedef struct grafo *Grafo;
 
 /* ============================================================================
@@ -109,8 +124,6 @@ void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta);
  /* Remove um vértice do grafo, liberando suas arestas e atualizando as listas de adjacência */
 int GAremoveVertice(Grafo p, int v) ;
 
-/* Remove uma aresta do grafo, atualizando as listas de adjacência dos vértices envolvidos */
-int GAremoveAresta(Grafo p, int idAresta);
 
 // /* ============================================================================
 //  * 2.2.3 Operações relacionadas às arestas do grafo
@@ -127,5 +140,9 @@ int GVomega(Grafo p, int a);
 
 // /* Retorna o vértice oposto a v1 conectado pela aresta 'a' */
 int GVvizinho(Grafo p, int a, int v1);
+
+/* Remove uma aresta do grafo, atualizando as listas de adjacência dos vértices envolvidos */
+int GAremoveAresta(Grafo p, int idAresta);
+
 
 #endif /* GRAFO_H */

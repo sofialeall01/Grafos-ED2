@@ -1,29 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 #include "grafo.h"
 
-typedef struct
-{
-    int alfa;        /* Identificador do vértice de partida (origem) */
-    int omega;       /* Identificador do vértice de chegada (destino) */
-    int proxSaida;   /* Próxima aresta pertencente à Estrela de Saída de 'alfa' */
-    int proxEntrada; /* Próxima aresta pertencente à Estrela de Entrada de 'omega' */
-} Aresta;
 
-typedef struct
-{
-    int primeiraSaida;   /* ID da primeira aresta na Estrela de Saída deste vértice */
-    int primeiraEntrada; /* ID da primeira aresta na Estrela de Entrada deste vértice */
-} Vertice;
-
-struct grafo
-{
-    int maxVertices; /* Capacidade maxima prevista para vertices */
-    int maxArestas;  /* Capacidade maxima prevista para arestas */
-    int numArestas;
-    Vertice *vertice; /* Vetor alocado dinamicamente para os Vertices */
-    Aresta *aresta;   /* Vetor alocado dinamicamente para as Arestas */
-};
 
 /*
  * Operação :: GGcriaGrafo
@@ -1007,6 +987,7 @@ int GAremoveAresta(Grafo p, int idAresta)
 
     return 1; /* Sucesso */
 }
+
 int GBarestaLaco(Grafo p, int a)
 {
     if (p == NULL)
@@ -1076,3 +1057,4 @@ int GVvizinho(Grafo p, int a, int v1)
 
     return 0;
 }
+

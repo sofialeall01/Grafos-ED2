@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grafo.h"
+#include "caminho.h"
 
 void exibirMenu(Grafo *g);
 int existe;
@@ -768,6 +769,34 @@ void exibirMenu(Grafo *g)
                     } else {
                         printf(">> Falha ao remover a aresta %d (ID invalido, fora do limite ou ja removida).\n", idAresta);
                     }
+                }
+                break;
+
+                case 34: // Ou a opção reservada para o caminho mínimo no seu menu
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+                {
+                    int a, b;
+                    printf("Digite o vertice de partida (a): ");
+                    scanf("%d", &a);
+                    printf("Digite o vertice de chegada (b): ");
+                    scanf("%d", &b);
+
+                    /* Exemplo de vetor de pesos indexado por 1 até numArestas */
+                    /* O tamanho é maxArestas + 1 conforme a especificação do enunciado */
+                    float *pesos = (float *) calloc((*g)->maxArestas + 1, sizeof(float));
+
+                    /* Exemplo: preenche os pesos com 1.0 para todas as arestas existentes */
+                    for (int i = 1; i <= (*g)->maxArestas; i++) {
+                        pesos[i] = 1.0f;
+                    }
+
+                    printf(">> Caminho encontrado:\n");
+                    Gcaminho(*g, pesos, a, b);
+
+                    free(pesos);
                 }
                 break;
         case 0:
