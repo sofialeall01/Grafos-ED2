@@ -1058,3 +1058,102 @@ int GVvizinho(Grafo p, int a, int v1)
     return 0;
 }
 
+/*FUNÇOES DO TP2 TAD ALGORITMOS EM GRAFOS*/
+
+void Gagm(Grafo g, float *pesos) {
+    if (g == NULL || g->vertice == NULL || g->aresta == NULL || pesos == NULL) {
+        printf(">> Grafo ou vetor de pesos invalido.\n");
+        return;
+    }
+
+    int numVertices = g->vertice[0].primeiraSaida; // Quantidade atual de vértices
+
+    if (numVertices <= 0) {
+        printf(">> Grafo vazio.\n");
+        return;
+    }
+
+    /* Vetores auxiliares para o Algoritmo de Prim */
+    float *chave = (float *) malloc((numVertices + 1) * sizeof(float));
+    int *paiAresta = (int *) malloc((numVertices + 1) * sizeof(int)); // Guarda o ID da aresta escolhida
+    int *pertenceAGM = (int *) calloc((numVertices + 1), sizeof(int));
+
+    if (chave == NULL || paiAresta == NULL || pertenceAGM == NULL) {
+        printf(">> Erro de alocacao de memoria.\n");
+        return;
+    }
+
+    /* 1. Inicialização */
+    for (int i = 1; i <= numVertices; i++) {
+        chave[i] = FLT_MAX;
+        paiAresta[i] = 0;
+    }
+
+    /* Começa pelo vértice 1 */
+    chave[1] = 0.0f;
+
+    /* 2. Construção da Árvore Geradora Mínima */
+    for (int count = 1; count <= numVertices; count++) {
+        int u = -1;
+        float minChave = FLT_MAX;
+
+        /* Seleciona o vértice fora da AGM com a menor chave de conexão */
+        for (int v = 1; v <= numVertices; v++) {
+            if (!pertenceAGM[v] && chave[v] < minChave) {
+                minChave = chave[v];
+                u = v;
+            }
+        }
+
+        /* Se não encontrou vértice alcançável (grafo desconexo) */
+        if (u == -1) {
+            break;
+        }
+
+        pertenceAGM[u] = 1;
+
+        /* Percorre a Estrela de Saída do vértice u para atualizar vizinhos */
+        int e = g->vertice[u].primeiraSaida;
+        while (e > 0) {
+            int v = g->aresta[e].omega;
+            float pesoAresta = pesos[e];
+
+            /* Se v não está na AGM e o peso desta aresta for menor que a chave atual de v */
+            if (!pertenceAGM[v] && pesoAresta < chave[v]) {
+                chave[v] = pesoAresta;
+                paiAresta[v] = e; // Guarda o ID da aresta que conecta u -> v
+            }
+
+            e = g->aresta[e].proxSaida;
+        }
+    }
+
+    /* 3. Impressão do Resultado (Lista de Arestas da AGM) */
+    printf("\n--- Arestas que formam a Arvore Geradora Minima (AGM) ---\n");
+    float custoTotal = 0.0f;
+    int arestasContadas = 0;
+
+    for (int v = 2; v <= numVertices; v++) {
+        int idAresta = paiAresta[v];
+        if (idAresta > 0) {
+            int orig = g->aresta[idAresta].alfa;
+            int dest = g->aresta[idAresta].omega;
+            float p = pesos[idAresta];
+
+            printf("Aresta %d: (%d -> %d) | Peso: %.2f\n", idAresta, orig, dest, p);
+            custoTotal += p;
+            arestasContadas++;
+        }
+    }
+
+    if (arestasContadas == 0) {
+        printf(">> Nenhuma arvore geradora foi encontrada (grafo desconexo ou sem arestas).\n");
+    } else {
+        printf("Custo Total da AGM: %.2f\n", custoTotal);
+    }
+
+    /* Libera a memória alocada */
+    free(chave);
+    free(paiAresta);
+    free(pertenceAGM);
+}

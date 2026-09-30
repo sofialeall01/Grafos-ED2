@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include "grafo.h"
 #include "caminho.h"
+/*
+TRABALHO DE ESTRUTURA DE DADOS II - GRAFOS
+NOMES: SOFIA MARIA DE JESUS LEAL
+       CAMILY LEAL SILVA
+       
+*/
 
 void exibirMenu(Grafo *g);
 int existe;
@@ -59,6 +65,13 @@ void exibirMenu(Grafo *g)
         printf("|                                     |  30-Pegar vertice de chegada               |\n");
         printf("| [CAMINHO CURTO]                     |  31-Pegar vertice vizinho                  |\n");
         printf("|  34-Encontrar menor caminho         |                                            |\n");
+        printf("|                                     |                                            |\n");
+        printf("| [ ALGORITMOS EM GRAFOS (TAD)]       |                                            |\n");
+        printf("|  35-Arvore Geradora Minima (AGM)    |                                            |\n");
+        printf("|  36-Busca em Largura (BEL)          |                                            |\n");
+        printf("|  37-Busca em Profundidade (BEP)     |                                            |\n");
+        printf("|  38-Caminho Mais Curto (CMC)        |                                            |\n");
+        printf("|  39-Componentes Conexos (CC)        |                                            |\n");
         printf("+-------------------------------------+--------------------------------------------+\n");
         printf("|                                 0-Sair                                           |\n");
         printf("+----------------------------------------------------------------------------------+\n");
@@ -795,6 +808,25 @@ void exibirMenu(Grafo *g)
 
                     printf(">> Caminho encontrado:\n");
                     Gcaminho(*g, pesos, a, b);
+
+                    free(pesos);
+                }
+                break;
+                case 35: 
+                if (*g == NULL) {
+                    printf(">> Crie ou carregue um grafo primeiro.\n");
+                    break;
+                }
+                {
+                    /* Cria/aloca o vetor de pesos das arestas */
+                    float *pesos = (float *) calloc((*g)->maxArestas + 1, sizeof(float));
+
+                    /* Preenche com valores de exemplo ou faz a leitura dos pesos */
+                    for (int i = 1; i <= (*g)->maxArestas; i++) {
+                        pesos[i] = 1.0f; // Exemplo com peso unitário
+                    }
+
+                    Gagm(*g, pesos);
 
                     free(pesos);
                 }

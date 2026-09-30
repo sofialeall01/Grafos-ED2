@@ -145,4 +145,11 @@ int GVvizinho(Grafo p, int a, int v1);
 int GAremoveAresta(Grafo p, int idAresta);
 
 
+// /* ============================================================================
+//  *  TP 2 - Algoritmos em grafos (TAD)
+//  * ============================================================================ */
+
+/// Implementação do Algoritmo de Prim para encontrar a Árvore Geradora Mínima (AGM) de um grafo ponderado
+void Gagm(Grafo g, float *pesos);
+
 #endif /* GRAFO_H */
