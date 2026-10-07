@@ -151,5 +151,8 @@ int GAremoveAresta(Grafo p, int idAresta);
 
 /// Implementação do Algoritmo de Prim para encontrar a Árvore Geradora Mínima (AGM) de um grafo ponderado
 void Gagm(Grafo g, float *pesos);
-
+void GBel(Grafo g, int inicio);
+void GBep(Grafo g, int inicio);
+void GAcmc(Grafo g, float *pesos, int inicio, int fim);
+void GBcc(Grafo g);
 #endif /* GRAFO_H */

@@ -1157,3 +1157,407 @@ void Gagm(Grafo g, float *pesos) {
     free(paiAresta);
     free(pertenceAGM);
 }
+
+void GBel(Grafo g, int inicio)
+{
+    if (g == NULL || !GBexisteIdVertice(g, inicio))
+        return;
+
+    int n = GInumeroVertices(g);
+
+    int *visitado = calloc(n + 1, sizeof(int));
+    int *fila = malloc((n + 1) * sizeof(int));
+
+    if (visitado == NULL || fila == NULL)
+    {
+        free(visitado);
+        free(fila);
+        return;
+    }
+
+    int frente = 0;
+    int tras = 0;
+
+    /* Visita o vértice inicial */
+    visitado[inicio] = 1;
+    fila[tras++] = inicio;
+
+    printf("v%d", inicio);
+
+    while (frente < tras)
+    {
+        int v = fila[frente++];
+
+        int a = GAprimaSaida(g, v);
+
+        while (a != 0)
+        {
+            int vizinho = GVomega(g, a);
+
+            if (!visitado[vizinho])
+            {
+                visitado[vizinho] = 1;
+
+                fila[tras++] = vizinho;
+
+                printf(",a%d,v%d", a, vizinho);
+            }
+
+            a = GAproxSaida(g, v, a);
+        }
+    }
+
+    printf("\n");
+
+    free(visitado);
+    free(fila);
+}
+
+void GBep(Grafo g, int inicio)
+{
+    if (g == NULL || !GBexisteIdVertice(g, inicio))
+    {
+        return;
+    }
+
+    int n = GInumeroVertices(g);
+
+    int *visitado = (int *)calloc(n + 1, sizeof(int));
+    int *pilha = (int *)malloc((n + 1) * sizeof(int));
+
+    if (visitado == NULL || pilha == NULL)
+    {
+        free(visitado);
+        free(pilha);
+        return;
+    }
+
+    int topo = 0;
+
+    pilha[topo++] = inicio;
+    visitado[inicio] = 1;
+
+    printf("v%d", inicio);
+
+    while (topo > 0)
+    {
+        int atual = pilha[topo - 1];
+
+        int a = GAprimaSaida(g, atual);
+        int encontrou = 0;
+
+        while (a != 0)
+        {
+            int vizinho = GVomega(g, a);
+
+            if (!visitado[vizinho])
+            {
+                visitado[vizinho] = 1;
+
+                printf(",a%d,v%d", a, vizinho);
+
+                pilha[topo++] = vizinho;
+
+                encontrou = 1;
+                break;
+            }
+
+            a = GAproxSaida(g, atual, a);
+        }
+
+        if (!encontrou)
+        {
+            topo--;
+        }
+    }
+
+    printf("\n");
+
+    free(visitado);
+    free(pilha);
+}
+
+
+void GAcmc(Grafo g, float *pesos, int inicio, int fim)
+{
+    if (g == NULL || pesos == NULL)
+    {
+        return;
+    }
+
+    /* Verifica se os vértices existem */
+    if (!GBexisteIdVertice(g, inicio) || !GBexisteIdVertice(g, fim))
+    {
+        return;
+    }
+
+    int n = GInumeroVertices(g);
+
+    /* Vetores utilizados pelo algoritmo de Dijkstra */
+    float *dist = (float *)malloc((n + 1) * sizeof(float));
+    int *pai = (int *)malloc((n + 1) * sizeof(int));
+    int *visitado = (int *)calloc(n + 1, sizeof(int));
+
+    if (dist == NULL || pai == NULL || visitado == NULL)
+    {
+        free(dist);
+        free(pai);
+        free(visitado);
+        return;
+    }
+
+    /*
+     * Inicialização:
+     * dist[v] = menor distância conhecida até v
+     * pai[v] = aresta utilizada para chegar em v
+     */
+    for (int v = 1; v <= n; v++)
+    {
+        dist[v] = FLT_MAX;
+        pai[v] = 0;
+    }
+
+    /* A distância do vértice inicial até ele mesmo é 0 */
+    dist[inicio] = 0.0f;
+
+    /*
+     * Algoritmo de Dijkstra
+     */
+    for (int i = 1; i <= n; i++)
+    {
+        int u = -1;
+        float menorDistancia = FLT_MAX;
+
+        /*
+         * Procura o vértice não visitado com a menor distância.
+         */
+        for (int v = 1; v <= n; v++)
+        {
+            if (!visitado[v] && dist[v] < menorDistancia)
+            {
+                menorDistancia = dist[v];
+                u = v;
+            }
+        }
+
+        /*
+         * Não existe mais nenhum vértice alcançável.
+         */
+        if (u == -1)
+        {
+            break;
+        }
+
+        visitado[u] = 1;
+
+        /*
+         * Se já chegamos ao destino, podemos parar.
+         */
+        if (u == fim)
+        {
+            break;
+        }
+
+        /*
+         * Percorre as arestas que saem de u.
+         */
+        int a = GAprimaSaida(g, u);
+
+        while (a != 0)
+        {
+            int v = GVomega(g, a);
+
+            /*
+             * Calcula a nova distância passando pela aresta a.
+             */
+            float novaDistancia = dist[u] + pesos[a];
+
+            /*
+             * Se encontramos um caminho melhor para v,
+             * atualizamos a distância e a aresta predecessora.
+             */
+            if (!visitado[v] && novaDistancia < dist[v])
+            {
+                dist[v] = novaDistancia;
+                pai[v] = a;
+            }
+
+            a = GAproxSaida(g, u, a);
+        }
+    }
+
+    /*
+     * Verifica se o destino foi alcançado.
+     */
+    if (dist[fim] == FLT_MAX)
+    {
+        printf("Nao existe caminho entre v%d e v%d.\n", inicio, fim);
+
+        free(dist);
+        free(pai);
+        free(visitado);
+
+        return;
+    }
+
+    /*
+     * Reconstrói o caminho.
+     *
+     * pai[v] contém a aresta utilizada para chegar em v.
+     * A origem da aresta indica o vértice anterior.
+     */
+    int *caminhoArestas = (int *)malloc((n + 1) * sizeof(int));
+    int quantidadeArestas = 0;
+
+    int atual = fim;
+
+    while (atual != inicio)
+    {
+        int a = pai[atual];
+
+        /*
+         * Segurança: caso não exista predecessor.
+         */
+        if (a == 0)
+        {
+            printf("Nao existe caminho entre v%d e v%d.\n", inicio, fim);
+
+            free(caminhoArestas);
+            free(dist);
+            free(pai);
+            free(visitado);
+
+            return;
+        }
+
+        caminhoArestas[quantidadeArestas++] = a;
+
+        atual = g->aresta[a].alfa;
+    }
+
+    /*
+     * Imprime o caminho na ordem correta:
+     *
+     * v1,a3,v2,a5,v4
+     */
+    printf("Caminho mais curto: v%d", inicio);
+
+    for (int i = quantidadeArestas - 1; i >= 0; i--)
+    {
+        int a = caminhoArestas[i];
+
+        printf(",a%d,v%d", a, g->aresta[a].omega);
+    }
+
+    printf("\n");
+
+    /*
+     * Distância total percorrida.
+     */
+    printf("Distancia percorrida: %.2f\n", dist[fim]);
+
+    /*
+     * Libera memória.
+     */
+    free(caminhoArestas);
+    free(dist);
+    free(pai);
+    free(visitado);
+}
+
+void GBcc(Grafo g)
+{
+    if (g == NULL)
+    {
+        return;
+    }
+
+    int n = GInumeroVertices(g);
+
+    int *visitado = (int *)calloc(n + 1, sizeof(int));
+
+    if (visitado == NULL)
+    {
+        return;
+    }
+
+    printf("Componentes conexos:\n");
+
+    for (int inicio = 1; inicio <= n; inicio++)
+    {
+        if (!GBexisteIdVertice(g, inicio) || visitado[inicio])
+        {
+            continue;
+        }
+
+        printf("{");
+
+        int primeiro = 1;
+
+        /* Fila para realizar uma busca em largura */
+        int *fila = (int *)malloc((n + 1) * sizeof(int));
+
+        if (fila == NULL)
+        {
+            free(visitado);
+            return;
+        }
+
+        int frente = 0;
+        int fim = 0;
+
+        fila[fim++] = inicio;
+        visitado[inicio] = 1;
+
+        while (frente < fim)
+        {
+            int u = fila[frente++];
+
+            if (!primeiro)
+            {
+                printf(",");
+            }
+
+            printf("%d", u);
+            primeiro = 0;
+
+            /* Percorre as arestas de saída */
+            int a = GAprimaSaida(g, u);
+
+            while (a != 0)
+            {
+                int v = GVomega(g, a);
+
+                if (!visitado[v])
+                {
+                    visitado[v] = 1;
+                    fila[fim++] = v;
+                }
+
+                a = GAproxSaida(g, u, a);
+            }
+
+            /* Percorre as arestas de entrada */
+            a = GAprimaEntrada(g, u);
+
+            while (a != 0)
+            {
+                int v = GValfa(g, a);
+
+                if (!visitado[v])
+                {
+                    visitado[v] = 1;
+                    fila[fim++] = v;
+                }
+
+                a = GAproxEntrada(g, u, a);
+            }
+        }
+
+        printf("}\n");
+
+        free(fila);
+    }
+
+    free(visitado);
+}
