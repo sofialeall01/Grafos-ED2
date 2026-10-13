@@ -19,7 +19,7 @@ struct grafo
 {
     int maxVertices; /* Capacidade maxima prevista para vertices */
     int maxArestas;  /* Capacidade maxima prevista para arestas */
-    int numArestas;
+    int numArestas;   
     Vertice *vertice; /* Vetor alocado dinamicamente para os Vertices */
     Aresta *aresta;   /* Vetor alocado dinamicamente para as Arestas */
 };
