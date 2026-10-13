@@ -6,7 +6,7 @@
 TRABALHO DE ESTRUTURA DE DADOS II - GRAFOS
 NOMES: SOFIA MARIA DE JESUS LEAL
        CAMILY LEAL SILVA
-       
+
 */
 
 void exibirMenu(Grafo *g);
@@ -653,7 +653,6 @@ void exibirMenu(Grafo *g)
             {
                 printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-  
             }
 
             printf("Digite o ID da aresta: ");
@@ -745,92 +744,183 @@ void exibirMenu(Grafo *g)
             }
 
             break;
-            case 32:            
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
-                {
-                    int v, removido;
-                    printf("Digite o ID do vertice a ser removido: ");
-                    scanf("%d", &v);
-
-                    removido = GAremoveVertice(*g, v);
-
-                    if (removido) {
-                        printf(">> Vertice %d e suas arestas incidentes foram removidos com sucesso!\n", v);
-                    } else {
-                        printf(">> Falha ao remover o vertice %d (ID invalido ou ja removido).\n", v);
-                    }
-                }
+        case 32:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
                 break;
+            }
+            {
+                int v, removido;
+                printf("Digite o ID do vertice a ser removido: ");
+                scanf("%d", &v);
 
-                case 33:
-                if (*g == NULL) { 
-                    printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n"); 
-                    break; 
-                }
+                removido = GAremoveVertice(*g, v);
+
+                if (removido)
                 {
-                    int idAresta, removido;
-                    printf("Digite o ID da aresta a ser removida: ");
-                    scanf("%d", &idAresta);
-
-                    removido = GAremoveAresta(*g, idAresta);
-
-                    if (removido) {
-                        printf(">> Aresta %d removida com sucesso!\n", idAresta);
-                    } else {
-                        printf(">> Falha ao remover a aresta %d (ID invalido, fora do limite ou ja removida).\n", idAresta);
-                    }
+                    printf(">> Vertice %d e suas arestas incidentes foram removidos com sucesso!\n", v);
                 }
-                break;
+                else
+                {
+                    printf(">> Falha ao remover o vertice %d (ID invalido ou ja removido).\n", v);
+                }
+            }
+            break;
 
-                case 34: // Ou a opção reservada para o caminho mínimo no seu menu
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
+        case 33:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                break;
+            }
+            {
+                int idAresta, removido;
+                printf("Digite o ID da aresta a ser removida: ");
+                scanf("%d", &idAresta);
+
+                removido = GAremoveAresta(*g, idAresta);
+
+                if (removido)
+                {
+                    printf(">> Aresta %d removida com sucesso!\n", idAresta);
+                }
+                else
+                {
+                    printf(">> Falha ao remover a aresta %d (ID invalido, fora do limite ou ja removida).\n", idAresta);
+                }
+            }
+            break;
+
+        case 34:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+            {
+                int a, b;
+                printf("Digite o vertice de partida (a): ");
+                scanf("%d", &a);
+                printf("Digite o vertice de chegada (b): ");
+                scanf("%d", &b);
+
+                /* Exemplo de vetor de pesos indexado por 1 até numArestas */
+                /* O tamanho é maxArestas + 1 conforme a especificação do enunciado */
+                float *pesos = (float *)calloc((*g)->maxArestas + 1, sizeof(float));
+
+                /* Exemplo: preenche os pesos com 1.0 para todas as arestas existentes */
+                for (int i = 1; i <= (*g)->maxArestas; i++)
+                {
+                    pesos[i] = 1.0f;
+                }
+
+                printf(">> Caminho encontrado:\n");
+                Gcaminho(*g, pesos, a, b);
+
+                free(pesos);
+            }
+            break;
+        case 35:
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+            {
+                /* Cria/aloca o vetor de pesos das arestas */
+                float *pesos = (float *)calloc((*g)->maxArestas + 1, sizeof(float));
+
+                /* Preenche com valores de exemplo ou faz a leitura dos pesos */
+                for (int i = 1; i <= (*g)->maxArestas; i++)
+                {
+                    pesos[i] = 1.0f; // Exemplo com peso unitário
+                }
+
+                Gagm(*g, pesos);
+
+                free(pesos);
+            }
+            break;
+        case 36: // Busca em Largura (BEL)
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+            {
+                int inicio;
+
+                printf("Digite o vertice de partida: ");
+                scanf("%d", &inicio);
+
+                GBel(*g, inicio);
+            }
+            break;
+        case 37: // Busca em Profundidade (BEP)
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+            {
+                int inicio;
+
+                printf("Digite o vertice de partida: ");
+                scanf("%d", &inicio);
+
+                GBep(*g, inicio);
+            }
+            break;
+        case 38: // Caminho Mais Curto (CMC)
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
+                break;
+            }
+            {
+                int inicio, fim;
+
+                printf("Digite o vertice de partida: ");
+                scanf("%d", &inicio);
+
+                printf("Digite o vertice de chegada: ");
+                scanf("%d", &fim);
+
+                float *pesos = (float *)calloc((*g)->maxArestas + 1, sizeof(float));
+
+                if (pesos == NULL)
+                {
+                    printf(">> Erro ao alocar memoria para os pesos.\n");
                     break;
                 }
+
+                /*
+                 * Por enquanto, todas as arestas recebem peso 1.
+                 * Se os pesos forem lidos do arquivo, essa parte deve
+                 * ser substituida pelos pesos reais.
+                 */
+                for (int i = 1; i <= (*g)->maxArestas; i++)
                 {
-                    int a, b;
-                    printf("Digite o vertice de partida (a): ");
-                    scanf("%d", &a);
-                    printf("Digite o vertice de chegada (b): ");
-                    scanf("%d", &b);
-
-                    /* Exemplo de vetor de pesos indexado por 1 até numArestas */
-                    /* O tamanho é maxArestas + 1 conforme a especificação do enunciado */
-                    float *pesos = (float *) calloc((*g)->maxArestas + 1, sizeof(float));
-
-                    /* Exemplo: preenche os pesos com 1.0 para todas as arestas existentes */
-                    for (int i = 1; i <= (*g)->maxArestas; i++) {
-                        pesos[i] = 1.0f;
-                    }
-
-                    printf(">> Caminho encontrado:\n");
-                    Gcaminho(*g, pesos, a, b);
-
-                    free(pesos);
+                    pesos[i] = 1.0f;
                 }
+
+                GAcmc(*g, pesos, inicio, fim);
+
+                free(pesos);
+            }
+            break;
+
+        case 39: // Componentes Conexos (CC)
+            if (*g == NULL)
+            {
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
-                case 35: 
-                if (*g == NULL) {
-                    printf(">> Crie ou carregue um grafo primeiro.\n");
-                    break;
-                }
-                {
-                    /* Cria/aloca o vetor de pesos das arestas */
-                    float *pesos = (float *) calloc((*g)->maxArestas + 1, sizeof(float));
+            }
 
-                    /* Preenche com valores de exemplo ou faz a leitura dos pesos */
-                    for (int i = 1; i <= (*g)->maxArestas; i++) {
-                        pesos[i] = 1.0f; // Exemplo com peso unitário
-                    }
+            GBcc(*g);
 
-                    Gagm(*g, pesos);
-
-                    free(pesos);
-                }
-                break;
+            break;
         case 0:
             printf("\n>> Encerrando o programa...\n");
             break;
