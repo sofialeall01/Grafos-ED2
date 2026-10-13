@@ -147,16 +147,16 @@ void exibirMenu(Grafo *g)
             }
 
             int alfa, omega;
-            printf("Digite o vértice de origem(alfa): ");
+            printf("Digite o vertice de origem(alfa): ");
             scanf("%d", &alfa);
 
-            printf("Digite o vértice de destino(omega): ");
+            printf("Digite o vertice de destino(omega): ");
             scanf("%d", &omega);
 
             int aresta = GAcriaAresta(*g, alfa, omega);
             if (aresta == 0)
             {
-                printf("Não foi possivel criar a aresta.\n");
+                printf("nao foi possivel criar a aresta.\n");
             }
             else
             {
@@ -173,18 +173,18 @@ void exibirMenu(Grafo *g)
                 break;
             }
 
-            printf("Digite o id do vértice:");
+            printf("Digite o id do vertice:");
             scanf("%d", &identificadorVertice);
 
             existe = GBexisteIdVertice(*g, identificadorVertice);
 
             if (existe == 0)
             {
-                printf(">> O vértice não existe.\n");
+                printf(">> O vertice nao existe.\n");
             }
             else
             {
-                printf(">> O vértice existe.");
+                printf(">> O vertice existe.");
             }
             break;
 
@@ -205,7 +205,7 @@ void exibirMenu(Grafo *g)
 
             if (existe == 0)
             {
-                printf(">> A aresta não existe.\n");
+                printf(">> A aresta nao existe.\n");
             }
             else
             {
@@ -220,17 +220,17 @@ void exibirMenu(Grafo *g)
                 break;
             }
 
-            printf("Digite o id do vértice de partida:");
+            printf("Digite o id do vertice de partida:");
             scanf("%d", &v1);
 
-            printf("Digite o id do vértice de chegada:");
+            printf("Digite o id do vertice de chegada:");
             scanf("%d", &v2);
 
             existe = GBexisteArestaDir(*g, v1, v2);
 
             if (existe == 0)
             {
-                printf(">> A aresta dirigida não existe.\n");
+                printf(">> A aresta dirigida nao existe.\n");
             }
             else
             {
@@ -245,21 +245,21 @@ void exibirMenu(Grafo *g)
                 break;
             }
 
-            printf("Digite o id do vértice 1:");
+            printf("Digite o id do vertice 1:");
             scanf("%d", &v1);
 
-            printf("Digite o id do vértice 2:");
+            printf("Digite o id do vertice 2:");
             scanf("%d", &v2);
 
             existe = GBexisteAresta(*g, v1, v2);
 
             if (existe == 0)
             {
-                printf(">> A aresta não dirigida não existe.\n");
+                printf(">> A aresta nao dirigida nao existe.\n");
             }
             else
             {
-                printf(">> A aresta não dirigida existe.");
+                printf(">> A aresta nao dirigida existe.");
             }
 
             break;
@@ -270,17 +270,17 @@ void exibirMenu(Grafo *g)
                 break;
             }
 
-            printf("Digite o id do vértice de partida:");
+            printf("Digite o id do vertice de partida:");
             scanf("%d", &v1);
 
-            printf("Digite o id do vértice de chegada:");
+            printf("Digite o id do vertice de chegada:");
             scanf("%d", &v2);
 
             existe = GApegaArestaDir(*g, v1, v2);
 
             if (existe == 0)
             {
-                printf(">> A aresta dirigida não existe.\n");
+                printf(">> A aresta dirigida nao existe.\n");
             }
             else
             {
@@ -295,21 +295,21 @@ void exibirMenu(Grafo *g)
                 break;
             }
 
-            printf("Digite o id do vértice 1:");
+            printf("Digite o id do vertice 1:");
             scanf("%d", &v1);
 
-            printf("Digite o id do vértice 2:");
+            printf("Digite o id do vertice 2:");
             scanf("%d", &v2);
 
             existe = GApegaAresta(*g, v1, v2);
 
             if (existe == 0)
             {
-                printf(">> A aresta não dirigida não existe.\n");
+                printf(">> A aresta nao dirigida nao existe.\n");
             }
             else
             {
-                printf(">> A aresta não dirigida existe. Id: %d\n", existe);
+                printf(">> A aresta nao dirigida existe. Id: %d\n", existe);
             }
 
             break;
@@ -323,11 +323,11 @@ void exibirMenu(Grafo *g)
             existe = GVprimeiroVertice(*g);
             if (existe == 0)
             {
-                printf(">> Não existe vértice.\n");
+                printf(">> nao existe vertice.\n");
             }
             else
             {
-                printf(">> Id do primeiro vértice: %d\n", existe);
+                printf(">> Id do primeiro vertice: %d\n", existe);
             }
 
             break;
@@ -429,7 +429,7 @@ void exibirMenu(Grafo *g)
         case 18:
             if (*g == NULL)
             {
-                printf(">> Crie ou carregue um grafo primeiro (Opcao 01).\n");
+                printf(">> Crie ou carregue um grafo primeiro.\n");
                 break;
             }
 
@@ -614,11 +614,11 @@ void exibirMenu(Grafo *g)
 
                 if (a1 != 0)
                 {
-                    printf(">> A primeira aresta na estrela de saída do vertice %d e: %d\n", v, a1);
+                    printf(">> A primeira aresta na estrela de saida do vertice %d e: %d\n", v, a1);
                 }
                 else
                 {
-                    printf(">> O vertice %d nao possui arestas na estrela de saída.\n", v);
+                    printf(">> O vertice %d nao possui arestas na estrela de saida.\n", v);
                 }
             }
             break;
@@ -640,11 +640,11 @@ void exibirMenu(Grafo *g)
 
                 if (a2 != 0)
                 {
-                    printf(">> A proxima aresta na estrela de saída do vertice %d (apos %d) e: %d\n", v, a1, a2);
+                    printf(">> A proxima aresta na estrela de saida do vertice %d (apos %d) e: %d\n", v, a1, a2);
                 }
                 else
                 {
-                    printf(">> Nao ha proxima aresta na estrela de saída do vertice %d apos a aresta %d.\n", v, a1);
+                    printf(">> Nao ha proxima aresta na estrela de saida do vertice %d apos a aresta %d.\n", v, a1);
                 }
             }
             break;
@@ -660,15 +660,15 @@ void exibirMenu(Grafo *g)
 
             if (!GBexisteIdAresta(*g, a1))
             {
-                printf(">> A aresta não existe.\n");
+                printf(">> A aresta nao existe.\n");
             }
             else if (GBarestaLaco(*g, a1))
             {
-                printf(">> A aresta é um laço.\n");
+                printf(">> A aresta eh um laço.\n");
             }
             else
             {
-                printf(">> A aresta não é um laço.\n");
+                printf(">> A aresta nao eh um laço.\n");
             }
 
             break;
@@ -687,11 +687,11 @@ void exibirMenu(Grafo *g)
 
             if (verticePartida != 0)
             {
-                printf(">> Vértice de partida: %d\n", verticePartida);
+                printf(">> vertice de partida: %d\n", verticePartida);
             }
             else
             {
-                printf(">> A aresta não existe.\n");
+                printf(">> A aresta nao existe.\n");
             }
 
             break;
@@ -710,11 +710,11 @@ void exibirMenu(Grafo *g)
 
             if (verticeChegada != 0)
             {
-                printf(">> Vértice de chegada: %d\n", verticeChegada);
+                printf(">> vertice de chegada: %d\n", verticeChegada);
             }
             else
             {
-                printf(">> A aresta não existe.\n");
+                printf(">> A aresta nao existe.\n");
             }
 
             break;
@@ -729,18 +729,18 @@ void exibirMenu(Grafo *g)
             printf("Digite o ID da aresta: ");
             scanf("%d", &a1);
 
-            printf("Digite o ID do vértice: ");
+            printf("Digite o ID do vertice: ");
             scanf("%d", &v1);
 
             int vizinho = GVvizinho(*g, a1, v1);
 
             if (vizinho != 0)
             {
-                printf(">> Vértice vizinho: %d\n", vizinho);
+                printf(">> vertice vizinho: %d\n", vizinho);
             }
             else
             {
-                printf(">> Não foi possível encontrar o vértice vizinho.\n");
+                printf(">> nao foi possível encontrar o vertice vizinho.\n");
             }
 
             break;
@@ -805,8 +805,8 @@ void exibirMenu(Grafo *g)
                 printf("Digite o vertice de chegada (b): ");
                 scanf("%d", &b);
 
-                /* Exemplo de vetor de pesos indexado por 1 até numArestas */
-                /* O tamanho é maxArestas + 1 conforme a especificação do enunciado */
+                /* Exemplo de vetor de pesos indexado por 1 ateh numArestas */
+                /* O tamanho eh maxArestas + 1 conforme a especificação do enunciado */
                 float *pesos = (float *)calloc((*g)->maxArestas + 1, sizeof(float));
 
                 /* Exemplo: preenche os pesos com 1.0 para todas as arestas existentes */

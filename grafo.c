@@ -798,7 +798,6 @@ int GAproxSaida(Grafo p, int v, int a1)
     return menorProxima;
 }
 
-/* Remove uma aresta específica da lista de saída do vértice 'alfa' */
 void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta)
 {
     int a = p->vertice[alfa].primeiraSaida;
@@ -823,7 +822,6 @@ void removeDaEstrelaSaida(Grafo p, int alfa, int idAresta)
     }
 }
 
-/* Remove uma aresta específica da lista de entrada do vértice 'omega' */
 void removeDaEstrelaEntrada(Grafo p, int omega, int idAresta)
 {
     int a = p->vertice[omega].primeiraEntrada;
